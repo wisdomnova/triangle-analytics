@@ -51,7 +51,7 @@ export default function ProfilePage() {
   }));
 
   const scriptSnippet = currentDomain
-    ? `<script defer src="https://triangle-analytics-api-5e8e94f7dd98.herokuapp.com/api/v1/tracker.js" data-site-id="${currentDomain.siteId}"></script>`
+    ? `<script defer src="https://triangle-analytics.vercel.app/tracker.js" data-site-id="${currentDomain.siteId}"></script>`
     : "<!-- Connect a domain property first to generate your tracking snippet -->";
 
   return (
