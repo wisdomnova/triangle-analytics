@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import CountryFlag from "./CountryFlag";
+import TechIcon from "./TechIcon";
 
 export interface BreakdownItem {
   name: string;
@@ -24,6 +25,7 @@ export default function BreakdownList({
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const currentItems = data[activeTab] || [];
   const isCountriesTab = activeTab === "Countries";
+  const isTechTab = ["Devices", "Browsers", "Operating Systems"].includes(activeTab);
 
   return (
     <div className="bg-white rounded-3xl p-6 flex flex-col gap-6 flex-1">
@@ -80,6 +82,9 @@ export default function BreakdownList({
                 <div className="relative z-10 flex items-center gap-2.5 truncate max-w-[200px]">
                   {isCountriesTab && (
                     <CountryFlag country={item.name} className="w-4 h-3 rounded-[2px] object-cover shrink-0" />
+                  )}
+                  {isTechTab && (
+                    <TechIcon name={item.name} size={16} className="text-neutral-600 shrink-0" />
                   )}
                   <span className="font-normal text-sm text-neutral-800 truncate">
                     {item.name}
