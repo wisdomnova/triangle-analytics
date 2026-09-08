@@ -39,9 +39,10 @@ const countryCodeMap: Record<string, keyof typeof Flags> = {
 interface CountryFlagProps {
   country: string;
   className?: string;
+  title?: string;
 }
 
-export default function CountryFlag({ country, className = "w-4 h-3 rounded-xs inline-block shrink-0" }: CountryFlagProps) {
+export default function CountryFlag({ country, className = "w-4 h-3 rounded-xs inline-block shrink-0", title }: CountryFlagProps) {
   const code = countryCodeMap[country] || "US";
   const FlagComponent = Flags[code];
 
@@ -51,5 +52,5 @@ export default function CountryFlag({ country, className = "w-4 h-3 rounded-xs i
     );
   }
 
-  return <FlagComponent className={className} />;
+  return <FlagComponent className={className} title={title || country} />;
 }

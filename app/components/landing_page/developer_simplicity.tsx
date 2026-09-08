@@ -31,20 +31,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }`,
-    "cURL (Ingestion API)": `curl -X POST "https://triangle-analytics-api-5e8e94f7dd98.herokuapp.com/api/v1/event" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "site_id": "tri_YOUR_SITE_ID",
-    "type": "pageview",
-    "pathname": "/pricing",
-    "hostname": "example.com"
-  }'`,
-    "Custom Events (JS)": `// Trigger custom conversion goals anywhere in your client code
-window.triangle.event("checkout_completed", {
-  plan: "pro",
-  currency: "USD",
-  value: 49
-});`,
   };
 
   const handleCopy = () => {
@@ -70,11 +56,11 @@ window.triangle.event("checkout_completed", {
             One snippet. Instant telemetry.
           </h2>
           <p className="text-xs sm:text-sm text-[#3A3935] max-w-md leading-relaxed mt-1">
-            Install via a lightweight snippet, import into modern Next.js/React apps, or dispatch custom events via our raw REST API.
+            Install via a lightweight script snippet or embed directly into modern Next.js and React web applications.
           </p>
         </div>
 
-        <div className="w-full bg-[#FAF8F5] border border-[#EAE5D9] rounded-3xl p-6 sm:p-8 flex flex-col gap-4 text-left shadow-xs">
+        <div className="w-full bg-[#FAF8F5] border border-[#EAE5D9] rounded-3xl p-6 sm:p-8 flex flex-col gap-4 text-left">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE5D9] pb-4">
             <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto">
               {Object.keys(snippets).map((tab) => (
