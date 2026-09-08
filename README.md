@@ -23,7 +23,7 @@
 ## ✨ Features
 
 - ⚡ **Ultra-Lightweight Script**: Sub-kilobyte tracking script that won't slow down your website.
-- 🔒 **Privacy-First & Cookie-Free**: Compliant with GDPR, CCPA, and PECR out of the box — no annoying cookie consent banners required.
+- 🔒 **Privacy-First & Cookie-Free**: Compliant with GDPR, CCPA, and PECR out of the box with zero annoying cookie consent banners required.
 - 📊 **Real-Time Live Dashboard**: Instant insights into active visitors, top pages, referrers, and geographic distribution.
 - 🎨 **Signature Triangle Design**: Built with the clean, warm minimalist aesthetic of The Triangle design system.
 - 🔑 **Simple Domain Claiming**: Easy onboarding with Email OTP and DNS TXT challenge verification.
@@ -85,7 +85,7 @@ triangle-analytics/
 ---
 
 ## 🤝 Sister Project
-- **[The Triangle](https://github.com/wisdomnova/the-triangle)** — Qualitative Product Intelligence Engine & Experience Compiler.
+- **[The Triangle](https://github.com/wisdomnova/the-triangle)**: Qualitative Product Intelligence Engine & Experience Compiler.
 
 ---
 

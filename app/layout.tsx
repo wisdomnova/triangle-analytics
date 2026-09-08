@@ -7,8 +7,16 @@ const outfit = {
 };
 
 export const metadata: Metadata = {
-  title: "Triangle Analytics — Lightweight Web Analytics",
+  title: "Triangle Analytics",
   description: "Lightweight, privacy-friendly web analytics platform for modern applications.",
+  openGraph: {
+    title: "Triangle Analytics",
+    description: "Lightweight, privacy-friendly web analytics platform for modern applications.",
+  },
+  twitter: {
+    title: "Triangle Analytics",
+    description: "Lightweight, privacy-friendly web analytics platform for modern applications.",
+  },
 };
 
 export const viewport: Viewport = {
