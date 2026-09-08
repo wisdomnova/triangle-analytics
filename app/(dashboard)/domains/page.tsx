@@ -29,6 +29,7 @@ export default function DomainsPage() {
   const [newDomainName, setNewDomainName] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [verifyingId, setVerifyingId] = useState<string | null>(null);
+  const [verifyFeedback, setVerifyFeedback] = useState<Record<string, { verified: boolean; message: string }>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -68,9 +69,24 @@ export default function DomainsPage() {
   const handleVerify = async (siteId: string) => {
     setVerifyingId(siteId);
     try {
-      await verifyDomain(siteId);
-    } catch (err) {
-      console.error(err);
+      const res = await verifyDomain(siteId);
+      if (res) {
+        setVerifyFeedback((prev) => ({
+          ...prev,
+          [siteId]: {
+            verified: res.verified,
+            message: res.message || (res.verified ? "Domain verified and active!" : "Script not detected yet."),
+          },
+        }));
+      }
+    } catch (err: unknown) {
+      setVerifyFeedback((prev) => ({
+        ...prev,
+        [siteId]: {
+          verified: false,
+          message: (err as Error).message || "Verification check failed. Please try again.",
+        },
+      }));
     } finally {
       setVerifyingId(null);
     }
@@ -309,6 +325,28 @@ export default function DomainsPage() {
                     {`<script defer src="https://triangle-analytics.vercel.app/tracker.js" data-site-id="${dom.siteId}"></script>`}
                   </code>
                 </div>
+
+                {verifyFeedback[dom.siteId] && (
+                  <div
+                    className={`p-4 rounded-2xl text-xs font-medium flex items-center justify-between gap-4 ${
+                      verifyFeedback[dom.siteId].verified
+                        ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                        : "bg-amber-50 text-amber-900 border border-amber-200"
+                    }`}
+                  >
+                    <span>{verifyFeedback[dom.siteId].message}</span>
+                    {!verifyFeedback[dom.siteId].verified && (
+                      <button
+                        type="button"
+                        onClick={() => handleVerify(dom.siteId)}
+                        disabled={isVerifying}
+                        className="font-semibold underline hover:no-underline cursor-pointer shrink-0"
+                      >
+                        {isVerifying ? "Checking..." : "Retry Verification"}
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           );

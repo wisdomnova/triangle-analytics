@@ -13,7 +13,7 @@ interface DomainContextType {
   refreshDomains: () => Promise<void>;
   addDomain: (domainData: { name: string; domain: string }) => Promise<DomainItem>;
   removeDomain: (siteId: string) => Promise<void>;
-  verifyDomain: (siteId: string) => Promise<void>;
+  verifyDomain: (siteId: string) => Promise<{ verified: boolean; message?: string; status?: string }>;
 }
 
 const DomainContext = createContext<DomainContextType | undefined>(undefined);
@@ -69,8 +69,9 @@ export function DomainProvider({ children }: { children: React.ReactNode }) {
   };
 
   const verifyDomain = async (siteId: string) => {
-    await api.dash.verifySite(siteId);
+    const res = await api.dash.verifySite(siteId);
     await refreshDomains();
+    return res;
   };
 
   return (

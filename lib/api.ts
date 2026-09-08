@@ -209,8 +209,8 @@ export const api = {
       });
     },
 
-    async verifySite(siteId: string): Promise<{ verified: boolean }> {
-      return fetchWithAuth<{ verified: boolean }>(`/api/dash/sites/${siteId}/verify`, {
+    async verifySite(siteId: string): Promise<{ verified: boolean; message?: string; status?: string }> {
+      return fetchWithAuth<{ verified: boolean; message?: string; status?: string }>(`/api/dash/sites/${siteId}/verify`, {
         method: "POST",
       });
     },
