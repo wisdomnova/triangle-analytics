@@ -22,7 +22,7 @@ export default function JoinPage() {
 
     try {
       await api.auth.signUp(name, email, password);
-      router.push("/overview");
+      router.push("/auth/claim-onboarding");
     } catch (err: unknown) {
       setErrorMessage((err as Error).message || "Registration failed. Please try again.");
     } finally {
