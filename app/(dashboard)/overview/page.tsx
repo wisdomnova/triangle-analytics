@@ -163,13 +163,19 @@ export default function OverviewPage() {
           { date: "Sun", visitors: 0, pageViews: 0, bounceRate: 0 },
         ];
 
+  // Dynamic segment metrics based on telemetry data (or 0% zero state)
+  const organicPercent =
+    referrersData?.Referrers?.find((r) => r.name.toLowerCase().includes("organic") || r.name.toLowerCase().includes("google"))?.percentage ||
+    (referrersData?.Referrers?.length ? referrersData.Referrers[0].percentage : 0);
+
+  const desktopPercent =
+    devicesData?.Devices?.find((d) => d.name === "Desktop")?.percentage || 0;
+
+  const topPagePercent =
+    pagesData?.Pages?.length ? pagesData.Pages[0].percentage : 0;
+
   const flagsData = {
-    Flags: [
-      { name: "experiment_new_pricing_v2", count: 420, percentage: 68 },
-      { name: "feature_live_websocket", count: 310, percentage: 49 },
-      { name: "flag_dark_theme_default", count: 180, percentage: 24 },
-      { name: "flag_cookie_free_telemetry", count: 120, percentage: 17 },
-    ],
+    Flags: [],
   };
 
   return (
@@ -217,18 +223,18 @@ export default function OverviewPage() {
       {/* Segmented Metric Indicators */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
         <SegmentProgress
-          percentage={83}
-          description="Visitors completing product onboarding flow without navigation dropoff"
+          percentage={topPagePercent}
+          description="Traffic concentration on primary entry routes without navigation dropoff"
           gradient="from-amber-400 to-rose-400"
         />
         <SegmentProgress
-          percentage={58}
-          description="Inbound traffic sessions originating directly from organic search"
+          percentage={organicPercent}
+          description="Inbound traffic sessions originating directly from organic search and referrals"
           gradient="from-yellow-400 to-teal-400"
         />
         <SegmentProgress
-          percentage={47}
-          description="Desktop and tablet sessions converting into active platform accounts"
+          percentage={desktopPercent}
+          description="Desktop and workstation sessions converting into active platform telemetry"
           gradient="from-sky-400 to-emerald-400"
         />
       </div>

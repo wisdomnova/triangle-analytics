@@ -30,34 +30,8 @@ export default function JoinPage() {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setErrorMessage("");
-    try {
-      const res = await fetch("http://localhost:3001/auth/google", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ credential: "mock_google_id_token" }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        setErrorMessage(data.error || "Google Sign-In failed");
-        return;
-      }
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      router.push("/auth/claim-onboarding");
-    } catch (err) {
-      setErrorMessage("Service unavailable. Proceeding with offline Google registration.");
-      localStorage.setItem("token", "mock_google_offline_token");
-      localStorage.setItem("user", JSON.stringify({ id: "offline_google", name: "Google User", email: "google-user@gmail.com" }));
-      setTimeout(() => {
-        router.push("/auth/claim-onboarding");
-      }, 1500);
-    }
+  const handleGoogleSignIn = () => {
+    setErrorMessage("Google Sign-In is coming soon. Please continue with your email registration.");
   };
 
   return (

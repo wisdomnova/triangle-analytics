@@ -10,8 +10,8 @@ import { api, getStoredUser } from "@/lib/api";
 export default function ProfilePage() {
   const router = useRouter();
   const { currentDomain, domains, setCurrentDomainId } = useDomain();
-  const [name, setName] = useState("Alex Rivera");
-  const [email, setEmail] = useState("alex@company.com");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [timezone, setTimezone] = useState("utc");
 
   const [anonymizeIp, setAnonymizeIp] = useState(true);
@@ -21,8 +21,15 @@ export default function ProfilePage() {
   useEffect(() => {
     const user = getStoredUser();
     if (user) {
-      setName(user.name);
-      setEmail(user.email);
+      setName(user.name || "");
+      setEmail(user.email || "");
+    } else {
+      api.auth.getMe().then((res) => {
+        if (res?.user) {
+          setName(res.user.name || "");
+          setEmail(res.user.email || "");
+        }
+      }).catch(() => {});
     }
   }, []);
 

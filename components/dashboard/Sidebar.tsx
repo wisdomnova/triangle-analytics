@@ -14,6 +14,7 @@ import {
   IconPlus,
 } from "@tabler/icons-react";
 import { useDomain } from "@/context/DomainContext";
+import { getStoredUser, api, User } from "@/lib/api";
 
 interface NavItem {
   href: string;
@@ -25,16 +26,21 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { domains, currentDomain, setCurrentDomainId } = useDomain();
-  const [profile, setProfile] = useState<{ name: string; email: string } | null>(null);
+  const [profile, setProfile] = useState<User | null>(null);
   const [isSwitcherOpen, setIsSwitcherOpen] = useState(false);
   const switcherRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const userStr = localStorage.getItem("user");
-    if (userStr) {
-      try {
-        setProfile(JSON.parse(userStr));
-      } catch (_) {}
+    const user = getStoredUser();
+    if (user) {
+      setProfile(user);
+    } else {
+      api.auth
+        .getMe()
+        .then((res) => {
+          if (res?.user) setProfile(res.user);
+        })
+        .catch(() => {});
     }
   }, []);
 
