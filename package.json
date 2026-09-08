@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@tabler/icons-react": "^3.46.0",
     "framer-motion": "^13.2.0",
     "material-symbols": "^0.47.1",
     "next": "16.3.4",
