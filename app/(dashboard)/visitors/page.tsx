@@ -90,15 +90,30 @@ export default function VisitorsPage() {
     );
   }
 
+  const getSessionStatus = (lastSeenIso: string, isOnline: boolean): "Active" | "Idle" | "Completed" => {
+    try {
+      const diffMs = Date.now() - new Date(lastSeenIso).getTime();
+      const diffMinutes = diffMs / 60000;
+      if (isOnline || diffMinutes < 1.5) return "Active";
+      if (diffMinutes < 15) return "Idle";
+      return "Completed";
+    } catch {
+      return "Completed";
+    }
+  };
+
   const visitorRows: DataRow[] = sessions.map((s, idx) => {
     const color = avatarColors[idx % avatarColors.length];
+    const isOnline = idx < activeVisitors;
+    const computedStatus = getSessionStatus(s.lastSeen, isOnline);
+
     return {
       id: s.sessionId || `v-${idx}`,
       name: `Visitor ${s.visitorId.substring(0, 6)}`,
       avatarColor: color,
-      status: idx === 0 && activeVisitors > 0 ? "Active" : "Completed",
+      status: computedStatus,
       type: `${s.entryPage} (${s.pagesViewed} pages)`,
-      email: `${s.browser} on ${s.os} (${s.country || "Global"})`,
+      email: `${s.browser} on ${s.os || "Mac"} (${s.country && s.country !== "Unknown" ? s.country : "Global"})`,
       timestamp: formatTimeAgo(s.lastSeen),
     };
   });
