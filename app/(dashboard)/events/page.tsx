@@ -87,14 +87,47 @@ export default function EventsPage() {
     );
   }
 
+  const formatEventDisplayName = (name: string, props?: Record<string, any>): string => {
+    if (name === "click") {
+      const text = props?.text ? `"${props.text}"` : "Button";
+      return `Click: ${text}`;
+    }
+    if (name === "scroll_depth") {
+      return `Scroll Depth ${props?.depth || 0}%`;
+    }
+    if (name === "screen_resize") {
+      return `Screen Resize (${props?.width}×${props?.height})`;
+    }
+    if (name === "screen_unfocus") {
+      return "Screen Unfocus (Tab Blurred)";
+    }
+    if (name === "screen_focus") {
+      return "Screen Focus (Tab Focused)";
+    }
+    if (name === "outbound_click") {
+      return `Outbound: ${props?.text || props?.url || "link"}`;
+    }
+    return name;
+  };
+
+  const formatEventType = (name: string): string => {
+    if (name === "click" || name === "outbound_click") return "Interaction";
+    if (name === "scroll_depth") return "Scroll Depth";
+    if (name.startsWith("screen_")) return "Viewport";
+    return "Custom Goal";
+  };
+
   const eventRows: DataRow[] = events.map((ev, idx) => {
     const color = avatarColors[idx % avatarColors.length];
+    const diffMs = Date.now() - new Date(ev.createdAt).getTime();
+    const isRecent = diffMs < 120000;
+
     return {
       id: `ev-${idx}`,
-      name: ev.name,
+      name: formatEventDisplayName(ev.name, ev.props),
       avatarColor: color,
-      status: "Completed",
-      type: "Custom Goal",
+      status: isRecent ? "Active" : "Completed",
+      type: formatEventType(ev.name),
       email: ev.pathname || "/",
       timestamp: formatTimeAgo(ev.createdAt),
     };
