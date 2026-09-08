@@ -41,37 +41,90 @@ export default function OverviewPage() {
     { date: "Sun", visitors: 4200, pageViews: 12500, bounceRate: 22 },
   ];
 
-  const breakdownDataLeft = {
+  const pagesData = {
     Pages: [
-      { name: "/", count: 6420 },
-      { name: "/pricing", count: 2180 },
-      { name: "/docs", count: 1840 },
-      { name: "/auth/join", count: 960 },
-      { name: "/blog", count: 520 },
+      { name: "/", count: 6420, percentage: 51 },
+      { name: "/pricing", count: 2180, percentage: 17 },
+      { name: "/docs", count: 1840, percentage: 15 },
+      { name: "/auth/join", count: 960, percentage: 8 },
+      { name: "/blog", count: 520, percentage: 4 },
     ],
     Routes: [
-      { name: "/api/v1/event", count: 24800 },
-      { name: "/api/v1/track", count: 18200 },
-      { name: "/api/v1/session", count: 5290 },
+      { name: "/api/v1/event", count: 24800, percentage: 54 },
+      { name: "/api/v1/track", count: 18200, percentage: 39 },
+      { name: "/api/v1/session", count: 5290, percentage: 11 },
     ],
     Hostnames: [
-      { name: "app.domain.com", count: 9400 },
-      { name: "www.domain.com", count: 3080 },
+      { name: "app.domain.com", count: 9400, percentage: 75 },
+      { name: "www.domain.com", count: 3080, percentage: 25 },
     ],
   };
 
-  const breakdownDataRight = {
+  const referrersData = {
     Referrers: [
-      { name: "Google Organic", count: 4850 },
-      { name: "Direct Traffic", count: 3120 },
-      { name: "Twitter / X", count: 1840 },
-      { name: "GitHub", count: 1210 },
-      { name: "Hacker News", count: 640 },
+      { name: "Google Organic", count: 4850, percentage: 39 },
+      { name: "Direct Traffic", count: 3120, percentage: 25 },
+      { name: "Twitter / X", count: 1840, percentage: 15 },
+      { name: "GitHub", count: 1210, percentage: 10 },
+      { name: "Hacker News", count: 640, percentage: 5 },
     ],
     "UTM Parameters": [
-      { name: "utm_source=twitter", count: 1420 },
-      { name: "utm_source=newsletter", count: 890 },
-      { name: "utm_campaign=product_hunt", count: 480 },
+      { name: "utm_source=twitter", count: 1420, percentage: 45 },
+      { name: "utm_source=newsletter", count: 890, percentage: 28 },
+      { name: "utm_campaign=launch_v2", count: 480, percentage: 15 },
+    ],
+  };
+
+  const countriesData = {
+    Countries: [
+      { name: "Nigeria", count: 4820, percentage: 39 },
+      { name: "United States", count: 3410, percentage: 27 },
+      { name: "United Kingdom", count: 1890, percentage: 15 },
+      { name: "Germany", count: 980, percentage: 8 },
+      { name: "Canada", count: 720, percentage: 6 },
+    ],
+  };
+
+  const devicesData = {
+    Devices: [
+      { name: "Desktop", count: 8420, percentage: 67 },
+      { name: "Mobile", count: 3410, percentage: 27 },
+      { name: "Tablet", count: 650, percentage: 5 },
+    ],
+    Browsers: [
+      { name: "Chrome", count: 7120, percentage: 57 },
+      { name: "Safari", count: 3240, percentage: 26 },
+      { name: "Firefox", count: 1180, percentage: 9 },
+      { name: "Edge", count: 940, percentage: 8 },
+    ],
+  };
+
+  const osData = {
+    "Operating Systems": [
+      { name: "Mac", count: 6180, percentage: 50 },
+      { name: "Windows", count: 3820, percentage: 31 },
+      { name: "iOS", count: 1420, percentage: 11 },
+      { name: "Android", count: 860, percentage: 7 },
+      { name: "Linux", count: 200, percentage: 2 },
+    ],
+  };
+
+  const eventsData = {
+    Events: [
+      { name: "signup_submitted", count: 960, total: 1240 },
+      { name: "pricing_plan_selected", count: 640, total: 820 },
+      { name: "script_verified", count: 410, total: 530 },
+      { name: "docs_copied", count: 280, total: 390 },
+      { name: "report_exported", count: 120, total: 160 },
+    ],
+  };
+
+  const flagsData = {
+    Flags: [
+      { name: "experiment_new_pricing_v2", count: 4200, total: 6800 },
+      { name: "feature_live_websocket", count: 3100, total: 4900 },
+      { name: "flag_dark_theme_default", count: 1800, total: 2400 },
+      { name: "flag_cookie_free_telemetry", count: 1200, total: 1700 },
     ],
   };
 
@@ -134,15 +187,45 @@ export default function OverviewPage() {
         />
       </div>
 
-      {/* Breakdown Panels Row */}
+      {/* Primary Traffic Breakdowns: Pages & Referrers */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
         <BreakdownList
           tabs={["Pages", "Routes", "Hostnames"]}
-          data={breakdownDataLeft}
+          data={pagesData}
         />
         <BreakdownList
           tabs={["Referrers", "UTM Parameters"]}
-          data={breakdownDataRight}
+          data={referrersData}
+        />
+      </div>
+
+      {/* Geographic, Device & OS Telemetry Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+        <BreakdownList
+          tabs={["Countries"]}
+          data={countriesData}
+        />
+        <BreakdownList
+          tabs={["Devices", "Browsers"]}
+          data={devicesData}
+        />
+        <BreakdownList
+          tabs={["Operating Systems"]}
+          data={osData}
+        />
+      </div>
+
+      {/* Free Built-In Custom Events & Feature Flags */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+        <BreakdownList
+          tabs={["Events"]}
+          data={eventsData}
+          columns={["VISITORS", "TOTAL"]}
+        />
+        <BreakdownList
+          tabs={["Flags"]}
+          data={flagsData}
+          columns={["VISITORS", "TOTAL"]}
         />
       </div>
     </div>
