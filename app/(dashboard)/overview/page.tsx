@@ -19,7 +19,6 @@ import {
 export default function OverviewPage() {
   const { currentDomain, isLoading: isDomainLoading } = useDomain();
   const [activeMetric, setActiveMetric] = useState("visitors");
-  const [selectedEnvironment, setSelectedEnvironment] = useState("all");
   const [selectedDateRange, setSelectedDateRange] = useState("7d");
 
   // Real-time active visitors hook (Socket.IO + polling sync + reconnect auto-refresh)
@@ -81,12 +80,6 @@ export default function OverviewPage() {
       isMounted = false;
     };
   }, [currentDomain?.siteId, selectedDateRange, refreshSignal]);
-
-  const environmentOptions = [
-    { value: "all", label: "All environments" },
-    { value: "production", label: "Production" },
-    { value: "staging", label: "Staging" },
-  ];
 
   const dateRangeOptions = [
     { value: "today", label: "Today" },
@@ -209,14 +202,6 @@ export default function OverviewPage() {
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>{activeVisitors} online now</span>
           </div>
-
-          <Dropdown
-            options={environmentOptions}
-            selected={selectedEnvironment}
-            onChange={setSelectedEnvironment}
-            widthClass="w-44"
-            variant="white"
-          />
 
           <Dropdown
             options={dateRangeOptions}
