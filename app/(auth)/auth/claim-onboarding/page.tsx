@@ -152,7 +152,7 @@ export default function ClaimOnboardingPage() {
 
               <button
                 type="button"
-                onClick={() => router.push("/dashboard")}
+                onClick={() => router.push("/overview")}
                 className="text-xs sm:text-sm font-semibold text-neutral-400 hover:text-neutral-600 transition-colors cursor-pointer py-2 select-none"
               >
                 Skip for now

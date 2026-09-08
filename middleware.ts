@@ -19,6 +19,11 @@ export function middleware(request: NextRequest) {
     (route) => pathname === route || pathname.startsWith(route + "/")
   );
 
+  // If user requests /dashboard, redirect to /overview
+  if (pathname === "/dashboard" || pathname.startsWith("/dashboard/")) {
+    return NextResponse.redirect(new URL("/overview", request.url));
+  }
+
   const authRoutes = ["/auth/signin", "/auth/join"];
   const isAuthRoute = authRoutes.some((route) => pathname === route);
 
