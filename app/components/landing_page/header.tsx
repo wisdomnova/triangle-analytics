@@ -14,13 +14,16 @@ export default function Header() {
       <div className="w-auto bg-[#ffffff]/70 backdrop-blur-md border border-[#EAE5D9]/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-full px-6 py-3 flex items-center justify-between gap-8 sm:gap-12 md:gap-16 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
         <Link
           href="/"
-          className="flex items-center gap-2.5 hover:opacity-85 transition-opacity"
+          className="flex items-center gap-2 hover:opacity-85 transition-opacity"
         >
           <img
             src="/images/logo-solid-plain.png"
             alt="Triangle Analytics Logo"
-            className="w-8 h-8 object-contain"
+            className="w-7 h-7 object-contain"
           />
+          <span className="text-sm font-semibold tracking-tight text-[#1E1E1C]">
+            Analytics
+          </span>
         </Link>
         <nav className="hidden md:flex items-center gap-8">
           <Link
@@ -40,12 +43,6 @@ export default function Header() {
             className="text-sm font-medium text-[#3A3935] hover:text-[#1E1E1C] transition-colors"
           >
             Pricing
-          </Link>
-          <Link
-            href="#live-demo"
-            className="text-sm font-medium text-[#3A3935] hover:text-[#1E1E1C] transition-colors"
-          >
-            Live Demo
           </Link>
         </nav>
         <div className="flex items-center gap-4">
