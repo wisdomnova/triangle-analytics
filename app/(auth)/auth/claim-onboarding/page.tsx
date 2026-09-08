@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { IconCopy, IconCheck, IconArrowRight, IconWorld, IconTag } from "@tabler/icons-react";
 
@@ -85,13 +86,12 @@ export default function ClaimOnboardingPage() {
                 <IconArrowRight size={18} />
               </button>
 
-              <button
-                type="button"
-                onClick={() => router.push("/overview")}
-                className="text-xs sm:text-sm font-semibold text-neutral-400 hover:text-neutral-600 transition-colors cursor-pointer py-2 select-none"
+              <Link
+                href="/overview"
+                className="text-xs sm:text-sm font-semibold text-neutral-400 hover:text-neutral-700 transition-colors cursor-pointer py-2 select-none"
               >
                 Skip for now
-              </button>
+              </Link>
             </div>
           </motion.div>
         )}
@@ -231,14 +231,13 @@ export default function ClaimOnboardingPage() {
             </div>
 
             <div className="flex items-center gap-3 pt-4 border-t border-[#EAE5D9]">
-              <button
-                type="button"
-                onClick={() => router.push("/overview")}
-                className="w-full bg-[#1E1E1C] hover:bg-black text-white py-4 rounded-full font-semibold text-sm transition-colors cursor-pointer text-center select-none shadow-sm flex items-center justify-center gap-2"
+              <Link
+                href="/overview"
+                className="w-full bg-[#1E1E1C] hover:bg-[#0B63E5] active:scale-[0.99] text-white py-4 rounded-full font-semibold text-sm transition-all cursor-pointer text-center select-none shadow-sm flex items-center justify-center gap-2 hover:shadow-md"
               >
                 <span>Go to Dashboard</span>
                 <IconArrowRight size={16} />
-              </button>
+              </Link>
             </div>
           </motion.div>
         )}
