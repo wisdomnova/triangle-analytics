@@ -22,8 +22,8 @@ export default function OverviewPage() {
   const [selectedEnvironment, setSelectedEnvironment] = useState("all");
   const [selectedDateRange, setSelectedDateRange] = useState("7d");
 
-  // Real-time active visitors hook (Socket.IO + polling sync)
-  const { activeVisitors } = useRealtime(currentDomain?.siteId);
+  // Real-time active visitors hook (Socket.IO + polling sync + reconnect auto-refresh)
+  const { activeVisitors, refreshSignal } = useRealtime(currentDomain?.siteId);
 
   // Live API States
   const [stats, setStats] = useState<OverviewStats | null>(null);
@@ -80,7 +80,7 @@ export default function OverviewPage() {
     return () => {
       isMounted = false;
     };
-  }, [currentDomain?.siteId, selectedDateRange]);
+  }, [currentDomain?.siteId, selectedDateRange, refreshSignal]);
 
   const environmentOptions = [
     { value: "all", label: "All environments" },

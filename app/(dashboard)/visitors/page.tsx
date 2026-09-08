@@ -38,7 +38,7 @@ export default function VisitorsPage() {
   const [sessions, setSessions] = useState<VisitorSession[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { activeVisitors, latestEvent } = useRealtime(currentDomain?.siteId);
+  const { activeVisitors, latestEvent, refreshSignal } = useRealtime(currentDomain?.siteId);
 
   const fetchVisitors = async () => {
     if (!currentDomain?.siteId) return;
@@ -57,7 +57,7 @@ export default function VisitorsPage() {
 
   useEffect(() => {
     fetchVisitors();
-  }, [currentDomain?.siteId]);
+  }, [currentDomain?.siteId, refreshSignal]);
 
   // Refetch or prepend when a new telemetry event arrives
   useEffect(() => {

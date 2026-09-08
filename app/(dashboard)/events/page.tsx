@@ -36,7 +36,7 @@ export default function EventsPage() {
   const [events, setEvents] = useState<CustomEventItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { latestEvent } = useRealtime(currentDomain?.siteId);
+  const { latestEvent, refreshSignal } = useRealtime(currentDomain?.siteId);
 
   const fetchEvents = async () => {
     if (!currentDomain?.siteId) return;
@@ -55,7 +55,7 @@ export default function EventsPage() {
 
   useEffect(() => {
     fetchEvents();
-  }, [currentDomain?.siteId]);
+  }, [currentDomain?.siteId, refreshSignal]);
 
   useEffect(() => {
     if (latestEvent) {

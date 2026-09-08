@@ -18,6 +18,7 @@ export function useRealtime(siteId?: string) {
   const [activeVisitors, setActiveVisitors] = useState<number>(0);
   const [latestEvent, setLatestEvent] = useState<TelemetryEvent | null>(null);
   const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [refreshSignal, setRefreshSignal] = useState<number>(0);
 
   useEffect(() => {
     if (!siteId) {
@@ -25,15 +26,24 @@ export function useRealtime(siteId?: string) {
       return;
     }
 
-    // 1. Fetch initial active visitor count
-    api.dash
-      .getRealtimeActive(siteId)
-      .then((res) => {
-        if (typeof res?.activeVisitors === "number") {
-          setActiveVisitors(res.activeVisitors);
-        }
-      })
-      .catch(() => {});
+    const fetchActiveCount = () => {
+      api.dash
+        .getRealtimeActive(siteId)
+        .then((res) => {
+          if (typeof res?.activeVisitors === "number") {
+            setActiveVisitors(res.activeVisitors);
+          }
+        })
+        .catch(() => {});
+    };
+
+    const triggerFullResync = () => {
+      fetchActiveCount();
+      setRefreshSignal((prev) => prev + 1);
+    };
+
+    // 1. Initial fetch
+    fetchActiveCount();
 
     // 2. Connect to Socket.IO real-time stream
     const socket = getSocket();
@@ -41,6 +51,7 @@ export function useRealtime(siteId?: string) {
     const handleConnect = () => {
       setIsConnected(true);
       socket.emit("join:site", siteId);
+      triggerFullResync();
     };
 
     const handleDisconnect = () => {
@@ -55,11 +66,14 @@ export function useRealtime(siteId?: string) {
 
     const handleTelemetryEvent = (event: TelemetryEvent) => {
       setLatestEvent(event);
+      triggerFullResync();
     };
 
     if (socket.connected) {
       setIsConnected(true);
       socket.emit("join:site", siteId);
+    } else {
+      socket.connect();
     }
 
     socket.on("connect", handleConnect);
@@ -67,20 +81,35 @@ export function useRealtime(siteId?: string) {
     socket.on("realtime:active", handleActiveUpdate);
     socket.on("telemetry:event", handleTelemetryEvent);
 
-    // 3. Fallback 20s polling for background drift sync
-    const interval = setInterval(() => {
-      api.dash
-        .getRealtimeActive(siteId)
-        .then((res) => {
-          if (typeof res?.activeVisitors === "number") {
-            setActiveVisitors(res.activeVisitors);
-          }
-        })
-        .catch(() => {});
-    }, 20000);
+    // 3. Network reconnection & window refocus triggers
+    const handleOnline = () => {
+      if (!socket.connected) {
+        socket.connect();
+      }
+      triggerFullResync();
+    };
+
+    const handleFocusOrVisibility = () => {
+      if (!document.hidden) {
+        if (!socket.connected) {
+          socket.connect();
+        }
+        triggerFullResync();
+      }
+    };
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("focus", handleFocusOrVisibility);
+    document.addEventListener("visibilitychange", handleFocusOrVisibility);
+
+    // 4. Fallback 20s polling for background drift sync
+    const interval = setInterval(fetchActiveCount, 20000);
 
     return () => {
       clearInterval(interval);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("focus", handleFocusOrVisibility);
+      document.removeEventListener("visibilitychange", handleFocusOrVisibility);
       socket.emit("leave:site", siteId);
       socket.off("connect", handleConnect);
       socket.off("disconnect", handleDisconnect);
@@ -89,5 +118,5 @@ export function useRealtime(siteId?: string) {
     };
   }, [siteId]);
 
-  return { activeVisitors, latestEvent, isConnected };
+  return { activeVisitors, latestEvent, isConnected, refreshSignal };
 }

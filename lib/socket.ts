@@ -9,8 +9,9 @@ export function getSocket(): Socket {
       transports: ["websocket", "polling"],
       autoConnect: true,
       reconnection: true,
-      reconnectionAttempts: 10,
+      reconnectionAttempts: Infinity,
       reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
     });
 
     socket.on("connect", () => {
@@ -20,6 +21,20 @@ export function getSocket(): Socket {
     socket.on("disconnect", (reason) => {
       console.log("[socket] Disconnected:", reason);
     });
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("online", () => {
+        if (socket && !socket.connected) {
+          socket.connect();
+        }
+      });
+
+      window.addEventListener("focus", () => {
+        if (socket && !socket.connected) {
+          socket.connect();
+        }
+      });
+    }
   }
 
   return socket;
