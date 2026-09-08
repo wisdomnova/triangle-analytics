@@ -33,7 +33,7 @@ export default function Header() {
             Features
           </Link>
           <Link
-            href="/docs"
+            href="#docs"
             className="text-sm font-medium text-[#3A3935] hover:text-[#1E1E1C] transition-colors"
           >
             Script & API
