@@ -117,7 +117,7 @@ export default function Sidebar({ onClose, isMobile }: SidebarProps) {
             <button
               type="button"
               onClick={onClose}
-              className="w-8 h-8 rounded-xl bg-white border border-[#EAE5D9] flex items-center justify-center text-neutral-500 hover:text-neutral-900 transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-xl bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center text-neutral-500 hover:text-neutral-900 transition-colors cursor-pointer"
               aria-label="Close menu"
             >
               <IconX size={18} stroke={2} />

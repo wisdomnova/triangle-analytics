@@ -2,39 +2,7 @@
 
 import React from "react";
 import * as Flags from "country-flag-icons/react/3x2";
-
-const countryCodeMap: Record<string, keyof typeof Flags> = {
-  Nigeria: "NG",
-  "United States": "US",
-  "United Kingdom": "GB",
-  Germany: "DE",
-  Canada: "CA",
-  France: "FR",
-  Japan: "JP",
-  India: "IN",
-  Brazil: "BR",
-  Australia: "AU",
-  Netherlands: "NL",
-  Spain: "ES",
-  Italy: "IT",
-  Ghana: "GH",
-  Kenya: "KE",
-  SouthAfrica: "ZA",
-  "South Africa": "ZA",
-  NG: "NG",
-  US: "US",
-  GB: "GB",
-  DE: "DE",
-  CA: "CA",
-  FR: "FR",
-  JP: "JP",
-  IN: "IN",
-  BR: "BR",
-  AU: "AU",
-  NL: "NL",
-  ES: "ES",
-  IT: "IT",
-};
+import { getCountryCode } from "@/lib/countries";
 
 interface CountryFlagProps {
   country: string;
@@ -42,13 +10,33 @@ interface CountryFlagProps {
   title?: string;
 }
 
-export default function CountryFlag({ country, className = "w-4 h-3 rounded-xs inline-block shrink-0", title }: CountryFlagProps) {
-  const code = countryCodeMap[country] || "US";
-  const FlagComponent = Flags[code];
+export default function CountryFlag({
+  country,
+  className = "w-4 h-3 rounded-xs inline-block shrink-0",
+  title,
+}: CountryFlagProps) {
+  const rawCode = getCountryCode(country);
+  const code = rawCode && rawCode in Flags ? (rawCode as keyof typeof Flags) : null;
 
+  if (!code) {
+    // Clean neutral fallback — never defaults to US
+    return (
+      <span
+        className={`${className} bg-neutral-200/80 rounded-[2px] inline-flex items-center justify-center text-[8px] text-neutral-500 font-mono select-none`}
+        title={title || country || "Unknown Region"}
+      >
+        🏳
+      </span>
+    );
+  }
+
+  const FlagComponent = Flags[code];
   if (!FlagComponent) {
     return (
-      <span className="w-4 h-3 bg-neutral-200 rounded-xs inline-block shrink-0" />
+      <span
+        className={`${className} bg-neutral-200/80 rounded-[2px] inline-block shrink-0`}
+        title={title || country}
+      />
     );
   }
 

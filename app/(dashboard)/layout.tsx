@@ -34,7 +34,7 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(true)}
-            className="w-9 h-9 rounded-xl bg-white border border-[#EAE5D9] flex items-center justify-center text-neutral-700 hover:text-neutral-900 hover:bg-neutral-50 transition-colors cursor-pointer"
+            className="w-9 h-9 rounded-xl bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center text-neutral-700 hover:text-neutral-900 transition-colors cursor-pointer"
             aria-label="Open navigation menu"
           >
             <IconMenu2 size={20} stroke={1.8} />
