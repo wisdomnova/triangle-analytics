@@ -105,8 +105,8 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Desktop Actions: GitHub Star (Black bg, white text/icon, no border, no shadow) + Login + Sign Up */}
-          <div className="hidden md:flex items-center gap-2.5 lg:gap-3 shrink-0">
+          {/* Desktop Actions: GitHub Star (Black) + Login + Sign Up (Black) with space before buttons */}
+          <div className="hidden md:flex items-center gap-2.5 lg:gap-3 shrink-0 ml-6 sm:ml-8 md:ml-10 lg:ml-14">
             <a
               href="https://github.com/wisdomnova/triangle-analytics"
               target="_blank"
@@ -130,7 +130,7 @@ export default function Header() {
 
             <Link
               href="/auth/join"
-              className="group flex items-center gap-1.5 text-xs sm:text-sm font-medium bg-neutral-100 hover:bg-neutral-200 text-[#1E1E1C] px-4 py-2 rounded-full transition-colors"
+              className="group flex items-center gap-1.5 text-xs sm:text-sm font-medium bg-[#1E1E1C] text-[#FAF6F0] pl-4 pr-3.5 py-2 rounded-full hover:bg-[#323230] transition-colors shadow-2xs"
             >
               <span>Sign Up</span>
               <span className="material-symbols-outlined text-[15px] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">

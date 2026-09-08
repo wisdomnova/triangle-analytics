@@ -64,8 +64,8 @@ export default function Footer() {
             <Link href="#features" className="text-xs text-[#3A3935] hover:text-[#1E1E1C] transition-colors w-max">
               Terms of Service
             </Link>
-            <Link href="https://triangle-analytics-api-5e8e94f7dd98.herokuapp.com/health" target="_blank" className="text-xs text-[#3A3935] hover:text-[#1E1E1C] transition-colors w-max">
-              Platform Status
+            <Link href="#features" className="text-xs text-[#3A3935] hover:text-[#1E1E1C] transition-colors w-max">
+              Platform Status (99.99%)
             </Link>
           </div>
         </div>

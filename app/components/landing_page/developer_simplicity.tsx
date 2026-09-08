@@ -31,6 +31,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }`,
+    "Flutter (Web)": `<!-- web/index.html (inside <head>) -->
+<!-- Flutter Web compiles to JS. Paste snippet into web/index.html: -->
+<head>
+  <script
+    defer
+    src="https://triangle-analytics.vercel.app/tracker.js"
+    data-site-id="tri_YOUR_SITE_ID"
+  ></script>
+</head>
+
+// Automated SPA route tracking (GoRouter / Navigator pushState) works automatically.
+// To trigger custom conversion events directly from Dart:
+import 'dart:js' as js;
+js.context.callMethod('eval', ["window.triangle?.event('resume_downloaded');"]);`,
   };
 
   const handleCopy = () => {
@@ -56,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             One snippet. Instant telemetry.
           </h2>
           <p className="text-xs sm:text-sm text-[#3A3935] max-w-md leading-relaxed mt-1">
-            Install via a lightweight script snippet or embed directly into modern Next.js and React web applications.
+            Install via a lightweight script snippet or embed directly into modern Next.js, React, and Flutter Web applications.
           </p>
         </div>
 

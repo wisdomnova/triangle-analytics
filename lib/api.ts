@@ -1,6 +1,5 @@
 /**
  * Triangle Analytics Frontend API Client
- * Connects to live backend: https://triangle-analytics-api-5e8e94f7dd98.herokuapp.com
  */
 
 export const API_BASE_URL =
@@ -11,6 +10,11 @@ export interface User {
   name: string;
   email: string;
   timezone?: string;
+  preferences?: {
+    anonymizeIp?: boolean;
+    excludeLocalhost?: boolean;
+    cookieFree?: boolean;
+  };
 }
 
 export interface AuthResponse {
@@ -184,6 +188,25 @@ export const api = {
 
     async getMe(): Promise<{ user: User }> {
       return fetchWithAuth<{ user: User }>("/api/auth/me");
+    },
+
+    async updateProfile(data: {
+      name?: string;
+      timezone?: string;
+      preferences?: {
+        anonymizeIp?: boolean;
+        excludeLocalhost?: boolean;
+        cookieFree?: boolean;
+      };
+    }): Promise<{ user: User }> {
+      const res = await fetchWithAuth<{ user: User }>("/api/auth/profile", {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      });
+      if (res?.user && typeof window !== "undefined") {
+        localStorage.setItem("user", JSON.stringify(res.user));
+      }
+      return res;
     },
 
     signOut(): void {
