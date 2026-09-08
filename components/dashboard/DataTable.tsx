@@ -86,7 +86,7 @@ export default function DataTable({ title, rows }: DataTableProps) {
   };
 
   return (
-    <div className="bg-white rounded-3xl p-8 flex flex-col gap-6 w-full">
+    <div className="bg-white rounded-3xl p-4 sm:p-6 flex flex-col gap-6 w-full max-w-full overflow-hidden min-w-0">
       {/* Header controls: Search & Filters */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         {title && (
@@ -208,7 +208,7 @@ export default function DataTable({ title, rows }: DataTableProps) {
       </div>
 
       {/* Pagination Controls */}
-      <div className="flex items-center justify-between pt-4 border-t border-neutral-100 text-xs font-light text-neutral-500">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-neutral-100 text-xs font-light text-neutral-500">
         <span>
           Showing {paginatedRows.length} of {filteredRows.length}
         </span>

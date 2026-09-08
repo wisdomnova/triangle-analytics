@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "material-symbols/index.css";
 
@@ -11,6 +11,11 @@ export const metadata: Metadata = {
   description: "Lightweight, privacy-friendly web analytics platform for modern applications.",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -19,9 +24,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={` ${outfit.variable} h-full antialiased`}
+      className={` ${outfit.variable} h-full antialiased w-full max-w-full overflow-x-hidden`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full w-full max-w-full overflow-x-hidden flex flex-col">{children}</body>
     </html>
   );
 }

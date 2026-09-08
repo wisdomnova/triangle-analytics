@@ -60,9 +60,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </p>
         </div>
 
-        <div className="w-full bg-[#FAF8F5] border border-[#EAE5D9] rounded-3xl p-6 sm:p-8 flex flex-col gap-4 text-left">
+        <div className="w-full bg-[#FAF8F5] border border-[#EAE5D9] rounded-3xl p-4 sm:p-8 flex flex-col gap-4 text-left">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EAE5D9] pb-4">
-            <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto">
+            <div className="flex items-center gap-2 overflow-x-auto max-w-full w-full sm:w-auto pb-1 sm:pb-0">
               {Object.keys(snippets).map((tab) => (
                 <button
                   key={tab}
@@ -71,7 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     setActiveTab(tab);
                     setCopied(false);
                   }}
-                  className={`text-xs font-semibold px-3.5 py-1.5 rounded-full transition-colors cursor-pointer whitespace-nowrap ${
+                  className={`text-xs font-semibold px-3.5 py-1.5 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                     activeTab === tab
                       ? "bg-[#1E1E1C] text-[#FAF6EE]"
                       : "text-neutral-500 hover:text-[#1E1E1C] hover:bg-neutral-100"
@@ -91,7 +91,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </button>
           </div>
 
-          <pre className="text-xs sm:text-sm text-[#1E1E1C] leading-relaxed overflow-x-auto p-4 bg-white border border-[#EAE5D9] rounded-2xl whitespace-pre font-mono">
+          <pre className="text-xs sm:text-sm text-[#1E1E1C] leading-relaxed overflow-x-auto max-w-full p-4 bg-white border border-[#EAE5D9] rounded-2xl whitespace-pre font-mono">
             <code>{snippets[activeTab]}</code>
           </pre>
         </div>

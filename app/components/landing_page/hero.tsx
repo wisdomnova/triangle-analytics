@@ -30,10 +30,10 @@ export default function Hero() {
         className="w-full max-w-6xl flex flex-col gap-12 items-start"
       >
         <div className="w-full flex justify-start px-2 sm:px-4 mb-4">
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-medium tracking-tight text-[#3A3935] text-left flex items-center min-h-[48px] sm:min-h-[64px] md:min-h-[80px]">
+          <h2 className="text-2xl sm:text-5xl md:text-6xl font-medium tracking-tight text-[#3A3935] text-left min-h-[56px] sm:min-h-[64px] md:min-h-[80px] leading-tight">
             <span>{displayText}</span>
             {!isTypingComplete && (
-              <span className="inline-block w-1 h-8 sm:h-12 md:h-14 bg-[#3A3935] ml-2 animate-pulse" />
+              <span className="inline-block w-0.5 sm:w-1 h-6 sm:h-12 md:h-14 bg-[#3A3935] ml-1.5 align-middle animate-pulse" />
             )}
           </h2>
         </div>

@@ -28,10 +28,10 @@ export default function BreakdownList({
   const isTechTab = ["Devices", "Browsers", "Operating Systems"].includes(activeTab);
 
   return (
-    <div className="bg-white rounded-3xl p-6 flex flex-col gap-6 flex-1">
+    <div className="bg-white rounded-3xl p-4 sm:p-6 flex flex-col gap-6 flex-1 w-full min-w-0">
       {/* Header Tabs & Column Labels */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-6">
+      <div className="flex items-center justify-between gap-2 overflow-x-auto max-w-full">
+        <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto">
           {tabs.map((tab) => {
             const isActive = tab === activeTab;
             return (

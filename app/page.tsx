@@ -15,9 +15,9 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-[#FAF8F5] text-[#1E1E1C] flex flex-col scroll-smooth">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#FAF8F5] text-[#1E1E1C] flex flex-col scroll-smooth">
       <Header />
-      <main className="flex-grow w-full flex flex-col items-center justify-center pb-12">
+      <main className="flex-grow w-full max-w-full overflow-x-hidden flex flex-col items-center justify-center pb-12">
         <Hero />
         <Features />
         <DeveloperSimplicity />

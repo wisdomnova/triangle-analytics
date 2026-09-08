@@ -12,6 +12,7 @@ import {
   IconSelector,
   IconCheck,
   IconPlus,
+  IconX,
 } from "@tabler/icons-react";
 import { useDomain } from "@/context/DomainContext";
 import { getStoredUser, api, User } from "@/lib/api";
@@ -22,7 +23,12 @@ interface NavItem {
   icon: React.ElementType;
 }
 
-export default function Sidebar() {
+interface SidebarProps {
+  onClose?: () => void;
+  isMobile?: boolean;
+}
+
+export default function Sidebar({ onClose, isMobile }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { domains, currentDomain, setCurrentDomainId } = useDomain();
@@ -86,15 +92,37 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <aside className="w-64 h-screen sticky top-0 bg-[#FAF8F5] border-r border-[#EAE5D9] flex flex-col py-8 gap-8 shrink-0 select-none">
+    <aside
+      className={`bg-[#FAF8F5] border-r border-[#EAE5D9] flex flex-col py-6 sm:py-8 gap-6 sm:gap-8 shrink-0 select-none overflow-y-auto ${
+        isMobile ? "w-full h-full" : "w-64 h-screen sticky top-0"
+      }`}
+    >
       {/* Top Header & Workspace Info */}
       <div className="flex flex-col px-6 gap-6 w-full">
-        <div className="flex items-center gap-2">
-          <img
-            src="/images/logo-solid-plain.png"
-            alt="Triangle Analytics Logo"
-            className="w-8 h-8 object-contain"
-          />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <img
+              src="/images/logo-solid-plain.png"
+              alt="Triangle Analytics Logo"
+              className="w-7 h-7 sm:w-8 sm:h-8 object-contain"
+            />
+            {isMobile && (
+              <span className="text-sm font-semibold text-[#1E1E1C]">
+                Analytics
+              </span>
+            )}
+          </div>
+
+          {isMobile && onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-8 h-8 rounded-xl bg-white border border-[#EAE5D9] flex items-center justify-center text-neutral-500 hover:text-neutral-900 transition-colors cursor-pointer"
+              aria-label="Close menu"
+            >
+              <IconX size={18} stroke={2} />
+            </button>
+          )}
         </div>
 
         <div className="flex flex-col gap-0.5 border-b border-[#EAE5D9] pb-6">
@@ -117,7 +145,8 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`w-full py-4 px-6 flex items-center gap-4 transition-colors duration-200 cursor-pointer relative ${
+              onClick={() => onClose?.()}
+              className={`w-full py-3.5 sm:py-4 px-6 flex items-center gap-4 transition-colors duration-200 cursor-pointer relative ${
                 isActive
                   ? "text-[#1E1E1C] font-semibold border-l-2 border-orange-500 bg-neutral-50/50"
                   : "text-neutral-500 hover:text-[#1E1E1C] border-l-2 border-transparent"
@@ -131,7 +160,7 @@ export default function Sidebar() {
       </div>
 
       {/* Bottom Section: Domain Switcher & Beta Badge */}
-      <div className="px-6 mt-auto flex flex-col gap-4">
+      <div className="px-6 mt-auto flex flex-col gap-4 pt-4">
         <div ref={switcherRef} className="relative w-full">
           <button
             type="button"
@@ -179,6 +208,7 @@ export default function Sidebar() {
                         onClick={() => {
                           setCurrentDomainId(d.siteId || d.id);
                           setIsSwitcherOpen(false);
+                          onClose?.();
                         }}
                         className={`flex items-center justify-between px-4 py-2.5 text-left transition-colors cursor-pointer ${
                           isSelected
@@ -221,6 +251,7 @@ export default function Sidebar() {
                   type="button"
                   onClick={() => {
                     setIsSwitcherOpen(false);
+                    onClose?.();
                     router.push("/domains");
                   }}
                   className="w-full flex items-center gap-2 px-4 py-2 text-xs font-normal text-[#0B63E5] hover:bg-neutral-50 transition-colors cursor-pointer"

@@ -19,7 +19,7 @@ export default function MetricsTabs({
   onSelectMetric,
 }: MetricsTabsProps) {
   return (
-    <div className="flex items-center gap-4 w-full overflow-x-auto">
+    <div className="flex items-center gap-3 sm:gap-4 w-full max-w-full overflow-x-auto pb-1">
       {metrics.map((item) => {
         const isActive = item.id === activeMetric;
         return (
@@ -27,8 +27,8 @@ export default function MetricsTabs({
             key={item.id}
             type="button"
             onClick={() => onSelectMetric(item.id)}
-            className={`flex flex-col items-start text-left p-6 rounded-2xl min-w-[200px] flex-1 transition-all cursor-pointer ${
-              isActive ? "bg-white" : "bg-transparent hover:bg-neutral-100/40"
+            className={`flex flex-col items-start text-left p-4 sm:p-6 rounded-2xl min-w-[140px] sm:min-w-[180px] flex-1 transition-all cursor-pointer shrink-0 ${
+              isActive ? "bg-white shadow-xs" : "bg-transparent hover:bg-neutral-100/40"
             }`}
           >
             <span className="text-xs font-normal text-neutral-400">

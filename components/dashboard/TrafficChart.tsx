@@ -30,8 +30,8 @@ export default function TrafficChart({ data, activeMetric }: TrafficChartProps) 
   const metricKey = getMetricKey();
 
   return (
-    <div className="w-full bg-white rounded-3xl p-8 flex flex-col gap-6">
-      <div className="w-full h-72">
+    <div className="w-full bg-white rounded-3xl p-4 sm:p-8 flex flex-col gap-6">
+      <div className="w-full h-56 sm:h-72">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <defs>

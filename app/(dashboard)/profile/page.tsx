@@ -61,7 +61,7 @@ export default function ProfilePage() {
       </h1>
 
       {/* Account Info Panel */}
-      <div className="bg-white rounded-3xl p-8 flex flex-col gap-6">
+      <div className="bg-white rounded-3xl p-4 sm:p-8 flex flex-col gap-6">
         <span className="text-base font-light text-neutral-900">
           User Account Details
         </span>
@@ -112,7 +112,7 @@ export default function ProfilePage() {
       </div>
 
       {/* Tracking Script Snippet Panel */}
-      <div className="bg-white rounded-3xl p-8 flex flex-col gap-6">
+      <div className="bg-white rounded-3xl p-4 sm:p-8 flex flex-col gap-6">
         <span className="text-base font-light text-neutral-900">
           Lightweight Tracking Code {currentDomain ? `(${currentDomain.domain})` : ""}
         </span>
@@ -123,7 +123,7 @@ export default function ProfilePage() {
             : "Connect your website domain to generate a snippet and start capturing telemetry."}
         </p>
 
-        <div className="bg-neutral-100/80 p-5 rounded-2xl overflow-x-auto">
+        <div className="bg-neutral-100/80 p-3 sm:p-5 rounded-2xl overflow-x-auto max-w-full">
           <code className="text-xs font-mono text-neutral-800 whitespace-nowrap">
             {scriptSnippet}
           </code>
@@ -131,7 +131,7 @@ export default function ProfilePage() {
       </div>
 
       {/* Privacy Preferences */}
-      <div className="bg-white rounded-3xl p-8 flex flex-col gap-6">
+      <div className="bg-white rounded-3xl p-4 sm:p-8 flex flex-col gap-6">
         <span className="text-base font-light text-neutral-900">
           Privacy and Telemetry Rules
         </span>
@@ -156,7 +156,7 @@ export default function ProfilePage() {
           />
         </div>
 
-        <div className="pt-4 flex items-center gap-4">
+        <div className="pt-4 flex flex-wrap items-center gap-4">
           <button
             type="button"
             className="bg-[#0B63E5] hover:bg-[#0952C3] text-white text-xs font-semibold px-6 py-3 rounded-full transition-colors cursor-pointer shadow-sm"

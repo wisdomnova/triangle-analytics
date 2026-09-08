@@ -26,7 +26,7 @@ export default function Pricing() {
 
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 text-left max-w-3xl">
           {/* Card 1: Beta Plan */}
-          <div className="bg-white border border-[#EAE5D9] rounded-[32px] p-8 flex flex-col justify-between gap-6">
+          <div className="bg-white border border-[#EAE5D9] rounded-[32px] p-6 sm:p-8 flex flex-col justify-between gap-6">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
                 <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider">
@@ -45,7 +45,7 @@ export default function Pricing() {
           </div>
 
           {/* Card 2: Pro Plan (Coming Soon) */}
-          <div className="bg-[#FAF8F5]/40 border border-[#EAE5D9]/60 rounded-[32px] p-8 flex flex-col justify-between gap-6 relative overflow-hidden">
+          <div className="bg-[#FAF8F5]/40 border border-[#EAE5D9]/60 rounded-[32px] p-6 sm:p-8 flex flex-col justify-between gap-6 relative overflow-hidden">
             <div className="absolute top-4 right-4 bg-neutral-100 border border-neutral-200 text-neutral-500 font-bold text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full">
               Coming Soon
             </div>

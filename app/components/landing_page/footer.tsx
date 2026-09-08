@@ -6,7 +6,7 @@ import CountryFlag from "@/components/dashboard/CountryFlag";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#FAF8F5] border-t border-[#EAE5D9] pt-16 pb-8 px-6 sm:px-8 flex flex-col items-center shrink-0">
+    <footer className="w-full max-w-full overflow-hidden bg-[#FAF8F5] border-t border-[#EAE5D9] pt-16 pb-8 px-4 sm:px-8 flex flex-col items-center shrink-0">
       <motion.div 
         initial={{ opacity: 0, filter: "blur(8px)", y: 20 }}
         whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}

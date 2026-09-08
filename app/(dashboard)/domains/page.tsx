@@ -132,7 +132,7 @@ export default function DomainsPage() {
       {isAddingDomain && (
         <form
           onSubmit={handleAddDomainSubmit}
-          className="bg-white rounded-3xl p-8 flex flex-col gap-6 border border-[#EAE5D9]"
+          className="bg-white rounded-3xl p-4 sm:p-8 flex flex-col gap-6 border border-[#EAE5D9]"
         >
           <span className="text-base font-light text-neutral-900">
             Register new domain property
@@ -208,25 +208,25 @@ export default function DomainsPage() {
           return (
             <div
               key={dom.siteId || dom.id}
-              className="bg-white rounded-3xl p-8 flex flex-col gap-8 border border-[#EAE5D9]"
+              className="bg-white rounded-3xl p-4 sm:p-8 flex flex-col gap-6 sm:gap-8 border border-[#EAE5D9] w-full max-w-full overflow-hidden"
             >
               {/* Card Header with Icons for Domain, Status, and Delete */}
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-                <div className="flex items-start gap-3.5">
+                <div className="flex items-start gap-3.5 min-w-0">
                   <div className="w-10 h-10 rounded-2xl bg-neutral-100 flex items-center justify-center text-neutral-700 shrink-0 mt-0.5">
                     <IconWorld size={20} stroke={1.5} />
                   </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-2xl font-light text-neutral-900 tracking-tight">
+                  <div className="flex flex-col gap-0.5 min-w-0">
+                    <span className="text-xl sm:text-2xl font-light text-neutral-900 tracking-tight break-all">
                       {dom.domain}
                     </span>
-                    <span className="text-xs font-light text-neutral-400">
+                    <span className="text-xs font-light text-neutral-400 truncate">
                       {dom.name}
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-6 self-start sm:self-auto">
                   {/* Status with Icon */}
                   <div className="flex items-center gap-1.5 text-xs font-light text-neutral-500">
                     {dom.status === "Active" ? (
@@ -250,9 +250,9 @@ export default function DomainsPage() {
               </div>
 
               {/* Metrics Row */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
                 <div className="flex flex-col gap-1">
-                  <span className="text-3xl font-light text-neutral-900 tracking-tight">
+                  <span className="text-2xl sm:text-3xl font-light text-neutral-900 tracking-tight">
                     {dom.visitors || "0"}
                   </span>
                   <span className="text-xs font-light text-neutral-400">
@@ -261,7 +261,7 @@ export default function DomainsPage() {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <span className="text-3xl font-light text-neutral-900 tracking-tight">
+                  <span className="text-2xl sm:text-3xl font-light text-neutral-900 tracking-tight">
                     {dom.pageViews || "0"}
                   </span>
                   <span className="text-xs font-light text-neutral-400">
@@ -270,7 +270,7 @@ export default function DomainsPage() {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <span className="text-3xl font-light text-neutral-900 tracking-tight">
+                  <span className="text-2xl sm:text-3xl font-light text-neutral-900 tracking-tight">
                     {dom.bounceRate || "0%"}
                   </span>
                   <span className="text-xs font-light text-neutral-400">
@@ -281,14 +281,14 @@ export default function DomainsPage() {
 
               {/* Script Snippet Block */}
               <div className="flex flex-col gap-3 pt-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs font-light text-neutral-400">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex flex-wrap items-center gap-2 text-xs font-light text-neutral-400">
                     <span>Tracking script for site ID</span>
-                    <span className="px-2 py-0.5 rounded-lg bg-neutral-100 font-mono text-[11px] text-neutral-700 tracking-wide select-all">
+                    <span className="px-2 py-0.5 rounded-lg bg-neutral-100 font-mono text-[11px] text-neutral-700 tracking-wide select-all break-all">
                       {dom.siteId}
                     </span>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-4 self-start sm:self-auto">
                     {dom.status !== "Active" && (
                       <button
                         type="button"
@@ -320,7 +320,7 @@ export default function DomainsPage() {
                   </div>
                 </div>
 
-                <div className="bg-[#FAF8F5] p-5 rounded-2xl overflow-x-auto">
+                <div className="bg-[#FAF8F5] p-3 sm:p-5 rounded-2xl overflow-x-auto max-w-full">
                   <code className="text-xs font-mono text-neutral-800 whitespace-nowrap">
                     {`<script defer src="https://triangle-analytics.vercel.app/tracker.js" data-site-id="${dom.siteId}"></script>`}
                   </code>

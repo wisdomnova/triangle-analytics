@@ -13,7 +13,7 @@ export default function CTA() {
         transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
         className="w-full max-w-6xl flex flex-col items-center text-center gap-8"
       >
-        <h2 className="text-4xl sm:text-7xl md:text-8xl font-medium tracking-tight text-[#1E1E1C] leading-[1.05]">
+        <h2 className="text-3xl sm:text-6xl md:text-8xl font-medium tracking-tight text-[#1E1E1C] leading-[1.05] break-words">
           Start measuring.
         </h2>
         <p className="text-sm sm:text-base text-[#3A3935] max-w-md leading-relaxed">
