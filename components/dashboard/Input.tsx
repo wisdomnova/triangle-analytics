@@ -11,7 +11,7 @@ export default function Input({ label, icon, className = "", ...props }: InputPr
   return (
     <div className="flex flex-col gap-1.5 w-full">
       {label && (
-        <span className="text-xs font-normal text-neutral-400">
+        <span className="block text-xs font-normal text-neutral-400 mb-0">
           {label}
         </span>
       )}
@@ -23,7 +23,7 @@ export default function Input({ label, icon, className = "", ...props }: InputPr
         )}
         <input
           {...props}
-          className={`w-full bg-neutral-100/70 hover:bg-neutral-100 focus:bg-white rounded-xl py-2.5 text-sm font-normal text-neutral-800 placeholder-neutral-400 transition-colors outline-none ${
+          className={`w-full h-11 bg-neutral-100/70 hover:bg-neutral-100 focus:bg-white rounded-xl text-sm font-normal text-neutral-900 placeholder-neutral-400 transition-colors outline-none ${
             icon ? "pl-11 pr-4" : "px-4"
           } ${className}`}
         />

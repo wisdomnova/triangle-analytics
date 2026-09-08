@@ -110,7 +110,7 @@ export default function DataTable({ title, rows }: DataTableProps) {
                 setCurrentPage(1);
               }}
               placeholder="Search sessions or users"
-              className="w-full bg-neutral-100/70 hover:bg-neutral-100 focus:bg-neutral-100 rounded-xl pl-10 pr-4 py-2 text-xs font-normal text-neutral-800 placeholder-neutral-400 outline-none transition-colors"
+              className="w-full h-11 bg-neutral-100/70 hover:bg-neutral-100 focus:bg-neutral-100 rounded-xl pl-10 pr-4 text-sm font-normal text-neutral-800 placeholder-neutral-400 outline-none transition-colors"
             />
           </div>
 
@@ -122,6 +122,7 @@ export default function DataTable({ title, rows }: DataTableProps) {
               setCurrentPage(1);
             }}
             widthClass="w-36"
+            variant="neutral"
           />
         </div>
       </div>

@@ -27,7 +27,7 @@ export default function ProfilePage() {
   return (
     <div className="flex flex-col gap-10 w-full max-w-4xl">
       <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-900">
-        Account settings and tracking script configuration
+        Account settings
       </h1>
 
       {/* Account Info Panel */}
@@ -64,6 +64,7 @@ export default function ProfilePage() {
             selected={timezone}
             onChange={setTimezone}
             widthClass="w-full"
+            variant="neutral"
           />
         </div>
       </div>

@@ -63,7 +63,7 @@ export default function EventsPage() {
   return (
     <div className="flex flex-col gap-10 w-full">
       <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-900">
-        Custom conversion goals and user interaction event triggers
+        Custom conversion goals
       </h1>
 
       <DataTable rows={eventRows} />

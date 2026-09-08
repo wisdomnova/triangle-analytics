@@ -133,11 +133,11 @@ export default function OverviewPage() {
       {/* Top Header Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-900">
-          Real time web traffic and visitor engagement overview
+          Real time overview
         </h1>
 
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2.5 bg-neutral-100/70 rounded-xl px-4 py-2.5 text-sm font-normal text-neutral-800 select-none">
+          <div className="flex items-center gap-2.5 bg-white hover:bg-neutral-50 rounded-xl px-4 h-11 text-sm font-medium text-neutral-900 select-none cursor-default transition-colors">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>12 online now</span>
           </div>
@@ -147,6 +147,7 @@ export default function OverviewPage() {
             selected={selectedEnvironment}
             onChange={setSelectedEnvironment}
             widthClass="w-44"
+            variant="white"
           />
 
           <Dropdown
@@ -154,6 +155,7 @@ export default function OverviewPage() {
             selected={selectedDateRange}
             onChange={setSelectedDateRange}
             widthClass="w-40"
+            variant="white"
           />
         </div>
       </div>

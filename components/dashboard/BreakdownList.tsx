@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { getCountryFlag } from "@/lib/emojis";
 
 export interface BreakdownItem {
   name: string;
@@ -22,6 +23,7 @@ export default function BreakdownList({
 }: BreakdownListProps) {
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const currentItems = data[activeTab] || [];
+  const isCountriesTab = activeTab === "Countries";
 
   return (
     <div className="bg-white rounded-3xl p-6 flex flex-col gap-6 flex-1">
@@ -75,9 +77,14 @@ export default function BreakdownList({
                   style={{ width: `${pct}%` }}
                 />
 
-                <span className="relative z-10 font-normal text-sm text-neutral-800 truncate max-w-[200px]">
-                  {item.name}
-                </span>
+                <div className="relative z-10 flex items-center gap-2.5 truncate max-w-[200px]">
+                  {isCountriesTab && (
+                    <span className="text-base select-none">{getCountryFlag(item.name)}</span>
+                  )}
+                  <span className="font-normal text-sm text-neutral-800 truncate">
+                    {item.name}
+                  </span>
+                </div>
 
                 <div className="relative z-10 flex items-center gap-6 text-sm font-light text-neutral-900">
                   <span>{item.count.toLocaleString()}</span>

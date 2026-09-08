@@ -81,7 +81,7 @@ export default function VisitorsPage() {
   return (
     <div className="flex flex-col gap-10 w-full">
       <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-900">
-        Live visitor sessions and active customer telemetry logs
+        Live visitor sessions
       </h1>
 
       <DataTable rows={visitorRows} />

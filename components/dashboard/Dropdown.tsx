@@ -14,6 +14,7 @@ interface DropdownProps {
   selected: string;
   onChange: (value: string) => void;
   widthClass?: string;
+  variant?: "white" | "neutral";
 }
 
 export default function Dropdown({
@@ -22,6 +23,7 @@ export default function Dropdown({
   selected,
   onChange,
   widthClass = "w-48",
+  variant = "white",
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -37,6 +39,7 @@ export default function Dropdown({
   }, []);
 
   const selectedLabel = options.find((opt) => opt.value === selected)?.label || selected;
+  const bgClass = variant === "white" ? "bg-white hover:bg-neutral-50" : "bg-neutral-100/80 hover:bg-neutral-100";
 
   return (
     <div ref={containerRef} className={`relative inline-block text-left ${widthClass}`}>
@@ -48,7 +51,7 @@ export default function Dropdown({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between bg-neutral-100/70 hover:bg-neutral-100 rounded-xl px-4 py-2.5 text-sm font-normal text-neutral-800 transition-colors cursor-pointer outline-none"
+        className={`w-full h-11 flex items-center justify-between ${bgClass} rounded-xl px-4 text-sm font-medium text-neutral-900 transition-colors cursor-pointer outline-none select-none`}
       >
         <span className="truncate">{selectedLabel}</span>
         {isOpen ? (
@@ -59,7 +62,7 @@ export default function Dropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 left-0 mt-2 bg-white rounded-xl py-1 z-30 overflow-hidden">
+        <div className="absolute right-0 left-0 mt-2 bg-white rounded-xl py-1.5 z-30 overflow-hidden">
           {options.map((opt) => {
             const isSelected = opt.value === selected;
             return (
@@ -70,7 +73,7 @@ export default function Dropdown({
                   onChange(opt.value);
                   setIsOpen(false);
                 }}
-                className={`w-full flex items-center justify-between px-4 py-2.5 text-sm font-normal transition-colors cursor-pointer ${
+                className={`w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer ${
                   isSelected ? "bg-neutral-100 text-neutral-900" : "text-neutral-600 hover:bg-neutral-50"
                 }`}
               >
