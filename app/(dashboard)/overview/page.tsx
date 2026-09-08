@@ -83,8 +83,8 @@ export default function OverviewPage() {
           Real time web traffic and visitor engagement overview
         </h1>
 
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2 bg-neutral-100/70 rounded-xl px-4 py-2.5 text-xs font-light text-neutral-700">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2.5 bg-neutral-100/70 rounded-xl px-4 py-2.5 text-sm font-normal text-neutral-800 select-none">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>12 online now</span>
           </div>
