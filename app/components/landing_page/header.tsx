@@ -74,8 +74,8 @@ export default function Header() {
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         className="sticky top-3 sm:top-4 z-50 w-full px-3 sm:px-6 md:px-8 flex justify-center pointer-events-auto"
       >
-        {/* Expanded rounded header box containing ALL navigation and action buttons */}
-        <div className="w-full max-w-6xl bg-white/90 backdrop-blur-md border border-[#EAE5D9]/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-full px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 flex items-center justify-between gap-4 sm:gap-6 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+        {/* Content-fit rounded header box containing ALL navigation and action buttons */}
+        <div className="w-full sm:w-fit max-w-[calc(100vw-1.5rem)] sm:max-w-fit bg-white/90 backdrop-blur-md border border-[#EAE5D9]/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-full px-4 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between gap-3 sm:gap-6 md:gap-8 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
           {/* Logo & Brand */}
           <Link
             href="/"
