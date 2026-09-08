@@ -4,43 +4,29 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { api } from "@/lib/api";
+
 export default function JoinPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
+    setIsLoading(true);
 
     try {
-      const res = await fetch("http://localhost:3001/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, password }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        setErrorMessage(data.error || "Registration failed");
-        return;
-      }
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      await api.auth.signUp(name, email, password);
       router.push("/auth/claim-onboarding");
-    } catch (err) {
-      setErrorMessage("Service unavailable. Proceeding with offline registration.");
-      localStorage.setItem("token", "mock_offline_token");
-      localStorage.setItem("user", JSON.stringify({ id: "offline", name, email }));
-      setTimeout(() => {
-        router.push("/auth/claim-onboarding");
-      }, 1500);
+    } catch (err: unknown) {
+      setErrorMessage((err as Error).message || "Registration failed. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -183,9 +169,10 @@ export default function JoinPage() {
 
               <button
                 type="submit"
-                className="w-full bg-[#0B63E5] hover:bg-[#0952C3] text-white py-3.5 rounded-full font-semibold text-base transition-colors mt-2 cursor-pointer shadow-sm"
+                disabled={isLoading}
+                className="w-full bg-[#0B63E5] hover:bg-[#0952C3] disabled:opacity-60 text-white py-3.5 rounded-full font-semibold text-base transition-colors mt-2 cursor-pointer shadow-sm"
               >
-                Join Us
+                {isLoading ? "Creating Account..." : "Join Us"}
               </button>
             </form>
 

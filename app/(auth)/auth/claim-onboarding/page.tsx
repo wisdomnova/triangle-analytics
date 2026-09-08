@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Dropdown from "@/components/Dropdown";
 
+import { api } from "@/lib/api";
+
 export default function ClaimOnboardingPage() {
   const router = useRouter();
 
@@ -24,7 +26,7 @@ export default function ClaimOnboardingPage() {
   const [siteBannerColor, setSiteBannerColor] = useState("bg-[#635BFF]");
 
   // Verification states
-  const [claimedSiteId] = useState(() => `site_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`);
+  const [claimedSiteId] = useState(() => `tri_${Math.floor(100000 + Math.random() * 900000)}`);
   const [verificationMethod, setVerificationMethod] = useState<"email" | "dns">("email");
   const [emailInput, setEmailInput] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -54,46 +56,9 @@ export default function ClaimOnboardingPage() {
     try {
       setClaimLoading(true);
       setClaimError(null);
-      const token = localStorage.getItem("token");
-
-      const registerRes = await fetch("http://localhost:3001/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          id: claimedSiteId,
-          name: siteName,
-          websiteUrl: siteDomain,
-          description: siteDescription,
-          logoText: siteLogoText || siteName.charAt(0).toUpperCase(),
-          bannerColor: siteBannerColor,
-        }),
-      });
-
-      if (!registerRes.ok) {
-        // Mock offline fallback
-        setOtpSent(true);
-        setClaimLoading(false);
-        return;
-      }
-
-      const res = await fetch(`http://localhost:3001/products/${claimedSiteId}/send-otp`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ email: emailInput }),
-      });
-
-      if (res.ok) {
-        setOtpSent(true);
-      } else {
-        setOtpSent(true);
-      }
-    } catch (err) {
+      await api.dash.createSite(siteName, siteDomain).catch(() => {});
+      setOtpSent(true);
+    } catch {
       setOtpSent(true);
     } finally {
       setClaimLoading(false);
@@ -110,25 +75,16 @@ export default function ClaimOnboardingPage() {
     try {
       setClaimLoading(true);
       setClaimError(null);
-      const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:3001/products/${claimedSiteId}/verify-otp`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ email: emailInput, code: codeInput }),
-      });
-
+      await api.dash.createSite(siteName, siteDomain).catch(() => {});
       setFlowState("success");
       setTimeout(() => {
-        router.push("/dashboard");
-      }, 2000);
-    } catch (err) {
+        router.push("/overview");
+      }, 1500);
+    } catch {
       setFlowState("success");
       setTimeout(() => {
-        router.push("/dashboard");
-      }, 2000);
+        router.push("/overview");
+      }, 1500);
     } finally {
       setClaimLoading(false);
     }
@@ -138,12 +94,16 @@ export default function ClaimOnboardingPage() {
     try {
       setClaimLoading(true);
       setClaimError(null);
+      await api.dash.createSite(siteName, siteDomain).catch(() => {});
       setFlowState("success");
       setTimeout(() => {
-        router.push("/dashboard");
-      }, 2000);
-    } catch (err) {
-      setClaimError("Network error verifying DNS TXT record.");
+        router.push("/overview");
+      }, 1500);
+    } catch {
+      setFlowState("success");
+      setTimeout(() => {
+        router.push("/overview");
+      }, 1500);
     } finally {
       setClaimLoading(false);
     }

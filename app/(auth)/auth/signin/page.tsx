@@ -4,42 +4,28 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { api } from "@/lib/api";
+
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
+    setIsLoading(true);
 
     try {
-      const res = await fetch("http://localhost:3001/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        setErrorMessage(data.error || "Login failed");
-        return;
-      }
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      router.push("/dashboard");
-    } catch (err) {
-      setErrorMessage("Service unavailable. Proceeding with offline access.");
-      localStorage.setItem("token", "mock_offline_token");
-      localStorage.setItem("user", JSON.stringify({ id: "offline", name: "Alex Rivera", email }));
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 1500);
+      await api.auth.signIn(email, password);
+      router.push("/overview");
+    } catch (err: unknown) {
+      setErrorMessage((err as Error).message || "Sign in failed. Please check your credentials.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -180,9 +166,10 @@ export default function SignInPage() {
 
               <button
                 type="submit"
-                className="w-full bg-[#0B63E5] hover:bg-[#0952C3] text-white py-3.5 rounded-full font-semibold text-base transition-colors mt-2 cursor-pointer shadow-sm"
+                disabled={isLoading}
+                className="w-full bg-[#0B63E5] hover:bg-[#0952C3] disabled:opacity-60 text-white py-3.5 rounded-full font-semibold text-base transition-colors mt-2 cursor-pointer shadow-sm"
               >
-                Sign In
+                {isLoading ? "Signing in..." : "Sign In"}
               </button>
             </form>
 

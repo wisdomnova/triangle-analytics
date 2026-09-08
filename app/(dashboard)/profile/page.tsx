@@ -1,12 +1,14 @@
 "use client";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Input from "@/components/dashboard/Input";
 import Checkbox from "@/components/dashboard/Checkbox";
 import Dropdown from "@/components/dashboard/Dropdown";
 import { useDomain } from "@/context/DomainContext";
+import { api, getStoredUser } from "@/lib/api";
 
 export default function ProfilePage() {
+  const router = useRouter();
   const { currentDomain, domains, setCurrentDomainId } = useDomain();
   const [name, setName] = useState("Alex Rivera");
   const [email, setEmail] = useState("alex@company.com");
@@ -15,6 +17,19 @@ export default function ProfilePage() {
   const [anonymizeIp, setAnonymizeIp] = useState(true);
   const [excludeLocalhost, setExcludeLocalhost] = useState(true);
   const [cookieFree, setCookieFree] = useState(true);
+
+  useEffect(() => {
+    const user = getStoredUser();
+    if (user) {
+      setName(user.name);
+      setEmail(user.email);
+    }
+  }, []);
+
+  const handleSignOut = () => {
+    api.auth.signOut();
+    router.push("/auth/signin");
+  };
 
   const timezoneOptions = [
     { value: "utc", label: "UTC (Coordinated Universal Time)" },
@@ -28,7 +43,7 @@ export default function ProfilePage() {
     label: `${d.domain} (${d.name})`,
   }));
 
-  const scriptSnippet = `<script defer src="https://analytics.triangle.io/tracker.js" data-site-id="${currentDomain.siteId}"></script>`;
+  const scriptSnippet = `<script defer src="https://triangle-analytics-api-5e8e94f7dd98.herokuapp.com/api/v1/tracker.js" data-site-id="${currentDomain.siteId}"></script>`;
 
   return (
     <div className="flex flex-col gap-10 w-full max-w-4xl">
@@ -121,12 +136,19 @@ export default function ProfilePage() {
           />
         </div>
 
-        <div className="pt-4">
+        <div className="pt-4 flex items-center gap-4">
           <button
             type="button"
             className="bg-[#0B63E5] hover:bg-[#0952C3] text-white text-xs font-semibold px-6 py-3 rounded-full transition-colors cursor-pointer shadow-sm"
           >
             Save Preferences
+          </button>
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs font-semibold px-6 py-3 rounded-full transition-colors cursor-pointer"
+          >
+            Sign Out
           </button>
         </div>
       </div>
