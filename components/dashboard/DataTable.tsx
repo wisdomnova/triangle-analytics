@@ -90,7 +90,7 @@ export default function DataTable({ title, rows }: DataTableProps) {
       {/* Header controls: Search & Filters */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         {title && (
-          <span className="text-base font-normal text-neutral-900">
+          <span className="text-base font-medium text-neutral-900">
             {title}
           </span>
         )}

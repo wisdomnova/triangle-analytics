@@ -79,7 +79,7 @@ export default function OverviewPage() {
     <div className="flex flex-col gap-10 w-full">
       {/* Top Header Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <h1 className="text-xl font-light text-neutral-900">
+        <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-900">
           Real time web traffic and visitor engagement overview
         </h1>
 

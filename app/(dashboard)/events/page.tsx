@@ -62,7 +62,7 @@ export default function EventsPage() {
 
   return (
     <div className="flex flex-col gap-10 w-full">
-      <h1 className="text-xl font-light text-neutral-900">
+      <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-900">
         Custom conversion goals and user interaction event triggers
       </h1>
 

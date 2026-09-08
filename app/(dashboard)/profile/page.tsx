@@ -26,13 +26,13 @@ export default function ProfilePage() {
 
   return (
     <div className="flex flex-col gap-10 w-full max-w-4xl">
-      <h1 className="text-xl font-light text-neutral-900">
+      <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-900">
         Account settings and tracking script configuration
       </h1>
 
       {/* Account Info Panel */}
       <div className="bg-white rounded-3xl p-8 flex flex-col gap-6">
-        <span className="text-sm font-normal text-neutral-900">
+        <span className="text-base font-medium text-neutral-900">
           User Account Details
         </span>
 
@@ -70,7 +70,7 @@ export default function ProfilePage() {
 
       {/* Tracking Script Snippet Panel */}
       <div className="bg-white rounded-3xl p-8 flex flex-col gap-6">
-        <span className="text-sm font-normal text-neutral-900">
+        <span className="text-base font-medium text-neutral-900">
           Lightweight Tracking Code
         </span>
 
@@ -87,7 +87,7 @@ export default function ProfilePage() {
 
       {/* Privacy Preferences */}
       <div className="bg-white rounded-3xl p-8 flex flex-col gap-6">
-        <span className="text-sm font-normal text-neutral-900">
+        <span className="text-base font-medium text-neutral-900">
           Privacy and Telemetry Rules
         </span>
 
