@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 export default function Hero() {
-  const fullText = "Simple, lightweight web analytics for modern apps";
+  const fullText = "Lightweight web analytics for modern apps";
   const [displayText, setDisplayText] = useState("");
   const [isTypingComplete, setIsTypingComplete] = useState(false);
 
