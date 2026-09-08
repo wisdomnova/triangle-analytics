@@ -31,15 +31,15 @@ export default function MetricsTabs({
               isActive ? "bg-white" : "bg-transparent hover:bg-neutral-100/40"
             }`}
           >
-            <span className="text-xs font-medium text-neutral-400">
+            <span className="text-xs font-normal text-neutral-400">
               {item.label}
             </span>
             <div className="flex items-baseline gap-3 mt-3">
-              <span className="text-3xl font-semibold text-neutral-900 tracking-tight">
+              <span className="text-3xl font-normal text-neutral-900 tracking-tight">
                 {item.value}
               </span>
               {item.subValue && (
-                <span className="text-xs font-medium text-neutral-500">
+                <span className="text-xs font-normal text-neutral-400">
                   {item.subValue}
                 </span>
               )}

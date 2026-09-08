@@ -4,11 +4,12 @@ import { useState } from "react";
 import Input from "@/components/dashboard/Input";
 import Checkbox from "@/components/dashboard/Checkbox";
 import Dropdown from "@/components/dashboard/Dropdown";
+import { useDomain } from "@/context/DomainContext";
 
 export default function ProfilePage() {
+  const { currentDomain, domains, setCurrentDomainId } = useDomain();
   const [name, setName] = useState("Alex Rivera");
   const [email, setEmail] = useState("alex@company.com");
-  const [domain, setDomain] = useState("app.triangle.io");
   const [timezone, setTimezone] = useState("utc");
 
   const [anonymizeIp, setAnonymizeIp] = useState(true);
@@ -22,7 +23,12 @@ export default function ProfilePage() {
     { value: "gmt", label: "GMT (Greenwich Mean Time)" },
   ];
 
-  const scriptSnippet = `<script defer src="https://analytics.triangle.io/tracker.js" data-site-id="tri_992140"></script>`;
+  const domainOptions = domains.map((d) => ({
+    value: d.id,
+    label: `${d.domain} (${d.name})`,
+  }));
+
+  const scriptSnippet = `<script defer src="https://analytics.triangle.io/tracker.js" data-site-id="${currentDomain.siteId}"></script>`;
 
   return (
     <div className="flex flex-col gap-10 w-full max-w-4xl">
@@ -32,7 +38,7 @@ export default function ProfilePage() {
 
       {/* Account Info Panel */}
       <div className="bg-white rounded-3xl p-8 flex flex-col gap-6">
-        <span className="text-base font-medium text-neutral-900">
+        <span className="text-base font-light text-neutral-900">
           User Account Details
         </span>
 
@@ -52,10 +58,13 @@ export default function ProfilePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-          <Input
-            label="Registered Domain"
-            value={domain}
-            onChange={(e) => setDomain(e.target.value)}
+          <Dropdown
+            label="Active Domain Context"
+            options={domainOptions}
+            selected={currentDomain.id}
+            onChange={(val) => setCurrentDomainId(val)}
+            widthClass="w-full"
+            variant="neutral"
           />
 
           <Dropdown
@@ -71,12 +80,12 @@ export default function ProfilePage() {
 
       {/* Tracking Script Snippet Panel */}
       <div className="bg-white rounded-3xl p-8 flex flex-col gap-6">
-        <span className="text-base font-medium text-neutral-900">
-          Lightweight Tracking Code
+        <span className="text-base font-light text-neutral-900">
+          Lightweight Tracking Code ({currentDomain.domain})
         </span>
 
         <p className="text-xs font-light text-neutral-500 leading-relaxed">
-          Insert this snippet into the header of your HTML to start capturing lightweight telemetry.
+          Insert this snippet into the header of your HTML to start capturing lightweight telemetry for {currentDomain.name}.
         </p>
 
         <div className="bg-neutral-100/80 p-5 rounded-2xl overflow-x-auto">
@@ -88,7 +97,7 @@ export default function ProfilePage() {
 
       {/* Privacy Preferences */}
       <div className="bg-white rounded-3xl p-8 flex flex-col gap-6">
-        <span className="text-base font-medium text-neutral-900">
+        <span className="text-base font-light text-neutral-900">
           Privacy and Telemetry Rules
         </span>
 
@@ -115,7 +124,7 @@ export default function ProfilePage() {
         <div className="pt-4">
           <button
             type="button"
-            className="bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-normal px-6 py-3 rounded-full transition-colors cursor-pointer"
+            className="bg-[#0B63E5] hover:bg-[#0952C3] text-white text-xs font-semibold px-6 py-3 rounded-full transition-colors cursor-pointer shadow-sm"
           >
             Save Preferences
           </button>

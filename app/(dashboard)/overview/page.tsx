@@ -6,8 +6,10 @@ import MetricsTabs from "@/components/dashboard/MetricsTabs";
 import TrafficChart from "@/components/dashboard/TrafficChart";
 import SegmentProgress from "@/components/dashboard/SegmentProgress";
 import BreakdownList from "@/components/dashboard/BreakdownList";
+import { useDomain } from "@/context/DomainContext";
 
 export default function OverviewPage() {
+  const { currentDomain } = useDomain();
   const [activeMetric, setActiveMetric] = useState("visitors");
   const [selectedEnvironment, setSelectedEnvironment] = useState("all");
   const [selectedDateRange, setSelectedDateRange] = useState("7d");
@@ -26,9 +28,9 @@ export default function OverviewPage() {
   ];
 
   const metrics = [
-    { id: "visitors", label: "Visitors", value: "12,480", subValue: "+14%" },
-    { id: "pageviews", label: "Page Views", value: "48,290", subValue: "+8%" },
-    { id: "bouncerate", label: "Bounce Rate", value: "28%", subValue: "-3%" },
+    { id: "visitors", label: "Visitors", value: currentDomain.visitors, subValue: "+14%" },
+    { id: "pageviews", label: "Page Views", value: currentDomain.pageViews, subValue: "+8%" },
+    { id: "bouncerate", label: "Bounce Rate", value: currentDomain.bounceRate, subValue: "-3%" },
   ];
 
   const chartData = [
@@ -55,8 +57,8 @@ export default function OverviewPage() {
       { name: "/api/v1/session", count: 5290, percentage: 11 },
     ],
     Hostnames: [
-      { name: "app.domain.com", count: 9400, percentage: 75 },
-      { name: "www.domain.com", count: 3080, percentage: 25 },
+      { name: currentDomain.domain, count: 9400, percentage: 75 },
+      { name: `www.${currentDomain.domain}`, count: 3080, percentage: 25 },
     ],
   };
 
