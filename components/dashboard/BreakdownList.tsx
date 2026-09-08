@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { getCountryFlag } from "@/lib/emojis";
+import CountryFlag from "./CountryFlag";
 
 export interface BreakdownItem {
   name: string;
@@ -79,7 +79,7 @@ export default function BreakdownList({
 
                 <div className="relative z-10 flex items-center gap-2.5 truncate max-w-[200px]">
                   {isCountriesTab && (
-                    <span className="text-base select-none">{getCountryFlag(item.name)}</span>
+                    <CountryFlag country={item.name} className="w-4 h-3 rounded-[2px] object-cover shrink-0" />
                   )}
                   <span className="font-normal text-sm text-neutral-800 truncate">
                     {item.name}

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@tabler/icons-react": "^3.46.0",
+    "country-flag-icons": "^1.6.20",
     "framer-motion": "^13.2.0",
     "material-symbols": "^0.47.1",
     "next": "16.3.4",
