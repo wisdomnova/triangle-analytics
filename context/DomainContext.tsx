@@ -1,116 +1,76 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { api, SiteItem } from "@/lib/api";
 
-export interface DomainItem {
-  id: string;
-  name: string;
-  domain: string;
-  siteId: string;
-  status: "Active" | "Pending" | "Unverified";
-  visitors: string;
-  pageViews: string;
-  bounceRate: string;
-  createdAt: string;
-}
+export type DomainItem = SiteItem;
 
 interface DomainContextType {
   domains: DomainItem[];
-  currentDomain: DomainItem;
+  currentDomain: DomainItem | null;
   setCurrentDomainId: (id: string) => void;
-  addDomain: (domainData: { name: string; domain: string }) => void;
-  removeDomain: (id: string) => void;
-  verifyDomain: (id: string) => void;
+  isLoading: boolean;
+  refreshDomains: () => Promise<void>;
+  addDomain: (domainData: { name: string; domain: string }) => Promise<DomainItem>;
+  removeDomain: (siteId: string) => Promise<void>;
+  verifyDomain: (siteId: string) => Promise<void>;
 }
-
-const initialDomains: DomainItem[] = [
-  {
-    id: "dom-1",
-    name: "Production Application",
-    domain: "app.triangle.io",
-    siteId: "tri_992140",
-    status: "Active",
-    visitors: "12,480",
-    pageViews: "48,290",
-    bounceRate: "28%",
-    createdAt: "Jun 14, 2026",
-  },
-  {
-    id: "dom-2",
-    name: "Developer API Gateway",
-    domain: "api.triangle.io",
-    siteId: "tri_418023",
-    status: "Active",
-    visitors: "5,820",
-    pageViews: "24,800",
-    bounceRate: "19%",
-    createdAt: "Jul 02, 2026",
-  },
-  {
-    id: "dom-3",
-    name: "Engineering & Tech Blog",
-    domain: "blog.triangle.dev",
-    siteId: "tri_871109",
-    status: "Active",
-    visitors: "2,140",
-    pageViews: "8,950",
-    bounceRate: "34%",
-    createdAt: "Jul 19, 2026",
-  },
-  {
-    id: "dom-4",
-    name: "Addons & Storefront",
-    domain: "store.triangle.co",
-    siteId: "tri_301984",
-    status: "Pending",
-    visitors: "410",
-    pageViews: "1,220",
-    bounceRate: "42%",
-    createdAt: "Aug 28, 2026",
-  },
-];
 
 const DomainContext = createContext<DomainContextType | undefined>(undefined);
 
 export function DomainProvider({ children }: { children: React.ReactNode }) {
-  const [domains, setDomains] = useState<DomainItem[]>(initialDomains);
-  const [currentDomainId, setCurrentDomainId] = useState<string>("dom-1");
+  const [domains, setDomains] = useState<DomainItem[]>([]);
+  const [currentDomainId, setCurrentDomainId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const refreshDomains = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const res = await api.dash.getSites();
+      const fetchedDomains = res.sites || [];
+      setDomains(fetchedDomains);
+
+      setCurrentDomainId((prevId) => {
+        if (prevId && fetchedDomains.some((d) => d.id === prevId || d.siteId === prevId)) {
+          return prevId;
+        }
+        return fetchedDomains.length > 0 ? fetchedDomains[0].siteId : null;
+      });
+    } catch {
+      // Fallback empty domains
+      setDomains([]);
+      setCurrentDomainId(null);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshDomains();
+  }, [refreshDomains]);
 
   const currentDomain =
-    domains.find((d) => d.id === currentDomainId) || domains[0] || initialDomains[0];
+    domains.find((d) => d.siteId === currentDomainId || d.id === currentDomainId) ||
+    (domains.length > 0 ? domains[0] : null);
 
-  const addDomain = ({ name, domain }: { name: string; domain: string }) => {
+  const addDomain = async ({ name, domain }: { name: string; domain: string }) => {
     const cleanDomain = domain.replace(/^https?:\/\//, "").replace(/\/$/, "");
-    const randomSiteId = `tri_${Math.floor(100000 + Math.random() * 900000)}`;
-    const newDomain: DomainItem = {
-      id: `dom-${Date.now()}`,
-      name: name.trim() || cleanDomain,
-      domain: cleanDomain,
-      siteId: randomSiteId,
-      status: "Active",
-      visitors: "0",
-      pageViews: "0",
-      bounceRate: "0%",
-      createdAt: "Just now",
-    };
-    setDomains((prev) => [newDomain, ...prev]);
-    setCurrentDomainId(newDomain.id);
+    const newSite = await api.dash.createSite(name.trim() || cleanDomain, cleanDomain);
+    await refreshDomains();
+    if (newSite?.siteId) {
+      setCurrentDomainId(newSite.siteId);
+    }
+    return newSite;
   };
 
-  const removeDomain = (id: string) => {
-    setDomains((prev) => {
-      const remaining = prev.filter((d) => d.id !== id);
-      if (currentDomainId === id && remaining.length > 0) {
-        setCurrentDomainId(remaining[0].id);
-      }
-      return remaining;
-    });
+  const removeDomain = async (siteId: string) => {
+    await api.dash.deleteSite(siteId);
+    await refreshDomains();
   };
 
-  const verifyDomain = (id: string) => {
-    setDomains((prev) =>
-      prev.map((d) => (d.id === id ? { ...d, status: "Active" } : d))
-    );
+  const verifyDomain = async (siteId: string) => {
+    await api.dash.verifySite(siteId);
+    await refreshDomains();
   };
 
   return (
@@ -118,7 +78,9 @@ export function DomainProvider({ children }: { children: React.ReactNode }) {
       value={{
         domains,
         currentDomain,
-        setCurrentDomainId,
+        setCurrentDomainId: (id: string) => setCurrentDomainId(id),
+        isLoading,
+        refreshDomains,
         addDomain,
         removeDomain,
         verifyDomain,

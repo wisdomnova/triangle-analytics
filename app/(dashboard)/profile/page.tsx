@@ -39,11 +39,13 @@ export default function ProfilePage() {
   ];
 
   const domainOptions = domains.map((d) => ({
-    value: d.id,
+    value: d.siteId || d.id,
     label: `${d.domain} (${d.name})`,
   }));
 
-  const scriptSnippet = `<script defer src="https://triangle-analytics-api-5e8e94f7dd98.herokuapp.com/api/v1/tracker.js" data-site-id="${currentDomain.siteId}"></script>`;
+  const scriptSnippet = currentDomain
+    ? `<script defer src="https://triangle-analytics-api-5e8e94f7dd98.herokuapp.com/api/v1/tracker.js" data-site-id="${currentDomain.siteId}"></script>`
+    : "<!-- Connect a domain property first to generate your tracking snippet -->";
 
   return (
     <div className="flex flex-col gap-10 w-full max-w-4xl">
@@ -73,14 +75,23 @@ export default function ProfilePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-          <Dropdown
-            label="Active Domain Context"
-            options={domainOptions}
-            selected={currentDomain.id}
-            onChange={(val) => setCurrentDomainId(val)}
-            widthClass="w-full"
-            variant="neutral"
-          />
+          {domains.length > 0 && currentDomain ? (
+            <Dropdown
+              label="Active Domain Context"
+              options={domainOptions}
+              selected={currentDomain.siteId || currentDomain.id}
+              onChange={(val) => setCurrentDomainId(val)}
+              widthClass="w-full"
+              variant="neutral"
+            />
+          ) : (
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-light text-neutral-400">Active Domain</label>
+              <div className="bg-neutral-100 px-4 py-3 rounded-xl text-xs text-neutral-500 font-light">
+                No connected domain properties
+              </div>
+            </div>
+          )}
 
           <Dropdown
             label="Analytics Timezone"
@@ -96,11 +107,13 @@ export default function ProfilePage() {
       {/* Tracking Script Snippet Panel */}
       <div className="bg-white rounded-3xl p-8 flex flex-col gap-6">
         <span className="text-base font-light text-neutral-900">
-          Lightweight Tracking Code ({currentDomain.domain})
+          Lightweight Tracking Code {currentDomain ? `(${currentDomain.domain})` : ""}
         </span>
 
         <p className="text-xs font-light text-neutral-500 leading-relaxed">
-          Insert this snippet into the header of your HTML to start capturing lightweight telemetry for {currentDomain.name}.
+          {currentDomain
+            ? `Insert this snippet into the header of your HTML to start capturing lightweight telemetry for ${currentDomain.name}.`
+            : "Connect your website domain to generate a snippet and start capturing telemetry."}
         </p>
 
         <div className="bg-neutral-100/80 p-5 rounded-2xl overflow-x-auto">

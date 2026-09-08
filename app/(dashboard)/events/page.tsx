@@ -1,72 +1,120 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import DataTable, { DataRow } from "@/components/dashboard/DataTable";
+import EmptyDomainState from "@/components/dashboard/EmptyDomainState";
+import { useDomain } from "@/context/DomainContext";
+import { useRealtime } from "@/hooks/useRealtime";
+import { api, CustomEventItem } from "@/lib/api";
+
+function formatTimeAgo(isoString: string): string {
+  try {
+    const diffMs = Date.now() - new Date(isoString).getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins} minutes ago`;
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours} hours ago`;
+    const diffDays = Math.floor(diffHours / 24);
+    return `${diffDays} days ago`;
+  } catch {
+    return "Recently";
+  }
+}
+
+const avatarColors = [
+  "bg-emerald-100 text-emerald-700",
+  "bg-indigo-100 text-indigo-700",
+  "bg-sky-100 text-sky-700",
+  "bg-amber-100 text-amber-700",
+  "bg-rose-100 text-rose-700",
+  "bg-purple-100 text-purple-700",
+];
 
 export default function EventsPage() {
-  const eventRows: DataRow[] = [
-    {
-      id: "ev-1",
-      name: "signup_submitted",
-      avatarColor: "bg-emerald-100 text-emerald-700",
+  const { currentDomain, isLoading: isDomainLoading } = useDomain();
+  const [events, setEvents] = useState<CustomEventItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { latestEvent } = useRealtime(currentDomain?.siteId);
+
+  const fetchEvents = async () => {
+    if (!currentDomain?.siteId) return;
+    try {
+      setIsLoading(true);
+      const res = await api.dash.getEvents(currentDomain.siteId, "30d", 1, 30);
+      if (res?.events) {
+        setEvents(res.events);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, [currentDomain?.siteId]);
+
+  useEffect(() => {
+    if (latestEvent) {
+      fetchEvents();
+    }
+  }, [latestEvent]);
+
+  if (isDomainLoading) {
+    return (
+      <div className="w-full bg-white rounded-3xl p-16 flex flex-col items-center justify-center gap-4 text-center border border-[#EAE5D9]">
+        <div className="w-8 h-8 border-2 border-neutral-300 border-t-[#0B63E5] rounded-full animate-spin" />
+        <span className="text-xs text-neutral-400 font-light">Loading conversion goals...</span>
+      </div>
+    );
+  }
+
+  if (!currentDomain) {
+    return (
+      <div className="flex flex-col gap-8 w-full">
+        <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-900">
+          Custom conversion goals
+        </h1>
+        <EmptyDomainState
+          title="No domain properties connected"
+          description="Connect a domain to track custom goal completions, button clicks, and user conversion funnels."
+          actionText="Connect your first domain"
+        />
+      </div>
+    );
+  }
+
+  const eventRows: DataRow[] = events.map((ev, idx) => {
+    const color = avatarColors[idx % avatarColors.length];
+    return {
+      id: `ev-${idx}`,
+      name: ev.name,
+      avatarColor: color,
       status: "Completed",
-      type: "User Conversion",
-      email: "auth/join",
-      timestamp: "5 minutes ago",
-    },
-    {
-      id: "ev-2",
-      name: "pricing_plan_selected",
-      avatarColor: "bg-indigo-100 text-indigo-700",
-      status: "Active",
-      type: "Checkout Intent",
-      email: "pricing#tier-pro",
-      timestamp: "18 minutes ago",
-    },
-    {
-      id: "ev-3",
-      name: "script_tag_verified",
-      avatarColor: "bg-sky-100 text-sky-700",
-      status: "Completed",
-      type: "Domain Setup",
-      email: "app.domain.com",
-      timestamp: "45 minutes ago",
-    },
-    {
-      id: "ev-4",
-      name: "docs_endpoint_copied",
-      avatarColor: "bg-amber-100 text-amber-700",
-      status: "Active",
-      type: "Developer Action",
-      email: "docs/api",
-      timestamp: "2 hours ago",
-    },
-    {
-      id: "ev-5",
-      name: "feedback_modal_opened",
-      avatarColor: "bg-rose-100 text-rose-700",
-      status: "Pending",
-      type: "Engagement",
-      email: "dashboard/feedback",
-      timestamp: "6 hours ago",
-    },
-    {
-      id: "ev-6",
-      name: "report_exported_csv",
-      avatarColor: "bg-purple-100 text-purple-700",
-      status: "Completed",
-      type: "Data Export",
-      email: "overview/export",
-      timestamp: "12 hours ago",
-    },
-  ];
+      type: "Custom Goal",
+      email: ev.pathname || "/",
+      timestamp: formatTimeAgo(ev.createdAt),
+    };
+  });
 
   return (
     <div className="flex flex-col gap-10 w-full">
-      <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-900">
-        Custom conversion goals
-      </h1>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-900">
+          Custom conversion goals
+        </h1>
+        <p className="text-xs sm:text-sm text-neutral-400 font-light">
+          Real-time telemetry event triggers captured from {currentDomain.name} ({currentDomain.domain}).
+        </p>
+      </div>
 
-      <DataTable rows={eventRows} />
+      <DataTable
+        title={isLoading ? "Updating conversion stream..." : "Tracked Event Log"}
+        rows={eventRows}
+      />
     </div>
   );
 }

@@ -135,7 +135,7 @@ export default function Sidebar() {
             <div className="flex flex-col gap-0.5 min-w-0 pr-2">
               <span className="text-xs font-normal text-neutral-400">Domain</span>
               <span className="text-xs font-medium text-neutral-900 truncate">
-                {currentDomain.domain}
+                {currentDomain ? currentDomain.domain : "No domain connected"}
               </span>
             </div>
             <IconSelector
@@ -147,7 +147,7 @@ export default function Sidebar() {
 
           {/* Popover Menu for Multi-Domain Switching */}
           {isSwitcherOpen && (
-            <div className="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-2xl py-2 z-40 flex flex-col gap-1 border border-[#EAE5D9]">
+            <div className="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-2xl py-2 z-40 flex flex-col gap-1 border border-[#EAE5D9] shadow-lg">
               <div className="px-4 py-1.5 flex items-center justify-between">
                 <span className="text-[11px] font-normal tracking-wide text-neutral-400 uppercase">
                   Switch Domain
@@ -157,51 +157,58 @@ export default function Sidebar() {
                 </span>
               </div>
 
-              <div className="flex flex-col max-h-56 overflow-y-auto">
-                {domains.map((d) => {
-                  const isSelected = d.id === currentDomain.id;
-                  return (
-                    <button
-                      key={d.id}
-                      type="button"
-                      onClick={() => {
-                        setCurrentDomainId(d.id);
-                        setIsSwitcherOpen(false);
-                      }}
-                      className={`flex items-center justify-between px-4 py-2.5 text-left transition-colors cursor-pointer ${
-                        isSelected
-                          ? "bg-neutral-100 text-neutral-900"
-                          : "text-neutral-700 hover:bg-neutral-50"
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div
-                          className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                            d.status === "Active"
-                              ? "bg-emerald-500"
-                              : "bg-amber-400"
-                          }`}
-                        />
-                        <div className="flex flex-col min-w-0">
-                          <span className="text-xs font-medium text-neutral-900 truncate">
-                            {d.domain}
-                          </span>
-                          <span className="text-[11px] font-light text-neutral-400 truncate">
-                            {d.name}
-                          </span>
+              {domains.length === 0 ? (
+                <div className="px-4 py-3 text-center flex flex-col gap-1">
+                  <span className="text-xs text-neutral-500 font-light">No connected domains</span>
+                  <span className="text-[10px] text-neutral-400">Connect a domain to track data</span>
+                </div>
+              ) : (
+                <div className="flex flex-col max-h-56 overflow-y-auto">
+                  {domains.map((d) => {
+                    const isSelected = currentDomain && (d.siteId === currentDomain.siteId || d.id === currentDomain.id);
+                    return (
+                      <button
+                        key={d.siteId || d.id}
+                        type="button"
+                        onClick={() => {
+                          setCurrentDomainId(d.siteId || d.id);
+                          setIsSwitcherOpen(false);
+                        }}
+                        className={`flex items-center justify-between px-4 py-2.5 text-left transition-colors cursor-pointer ${
+                          isSelected
+                            ? "bg-neutral-100 text-neutral-900 font-medium"
+                            : "text-neutral-700 hover:bg-neutral-50"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div
+                            className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                              d.status === "Active"
+                                ? "bg-emerald-500"
+                                : "bg-amber-400"
+                            }`}
+                          />
+                          <div className="flex flex-col min-w-0">
+                            <span className="text-xs font-medium text-neutral-900 truncate">
+                              {d.domain}
+                            </span>
+                            <span className="text-[11px] font-light text-neutral-400 truncate">
+                              {d.name}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                      {isSelected && (
-                        <IconCheck
-                          size={14}
-                          stroke={1.8}
-                          className="text-neutral-900 shrink-0 ml-2"
-                        />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
+                        {isSelected && (
+                          <IconCheck
+                            size={14}
+                            stroke={1.8}
+                            className="text-neutral-900 shrink-0 ml-2"
+                          />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
 
               <div className="pt-1 mt-1 border-t border-neutral-100">
                 <button
@@ -210,10 +217,10 @@ export default function Sidebar() {
                     setIsSwitcherOpen(false);
                     router.push("/domains");
                   }}
-                  className="w-full flex items-center gap-2 px-4 py-2 text-xs font-normal text-neutral-700 hover:text-neutral-900 hover:bg-neutral-50 transition-colors cursor-pointer"
+                  className="w-full flex items-center gap-2 px-4 py-2 text-xs font-normal text-[#0B63E5] hover:bg-neutral-50 transition-colors cursor-pointer"
                 >
                   <IconPlus size={14} stroke={1.6} />
-                  <span>Add or manage domains</span>
+                  <span>{domains.length === 0 ? "Add your first domain" : "Add or manage domains"}</span>
                 </button>
               </div>
             </div>

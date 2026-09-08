@@ -18,6 +18,60 @@ export interface AuthResponse {
   user: User;
 }
 
+export interface SiteItem {
+  id: string;
+  siteId: string;
+  name: string;
+  domain: string;
+  status: "Active" | "Pending" | "Unverified";
+  visitors: string;
+  pageViews: string;
+  bounceRate: string;
+  createdAt: string;
+}
+
+export interface OverviewStats {
+  visitors: string;
+  pageViews: string;
+  bounceRate: string;
+  changes: {
+    visitors: string;
+    pageViews: string;
+    bounceRate: string;
+  };
+}
+
+export interface TimeseriesPoint {
+  date: string;
+  visitors: number;
+  pageviews: number;
+}
+
+export interface DimensionItem {
+  name: string;
+  count: number;
+  percentage: number;
+}
+
+export interface VisitorSession {
+  visitorId: string;
+  sessionId: string;
+  entryPage: string;
+  pagesViewed: number;
+  country: string;
+  device: string;
+  browser: string;
+  os: string;
+  lastSeen: string;
+}
+
+export interface CustomEventItem {
+  name: string;
+  pathname: string;
+  props: Record<string, unknown>;
+  createdAt: string;
+}
+
 /**
  * Store auth session in localStorage and cookie (for Next.js middleware)
  */
@@ -25,7 +79,6 @@ export function setAuthSession(token: string, user: User): void {
   if (typeof window !== "undefined") {
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
-    // Set 30-day cookie for middleware authentication
     document.cookie = `auth_token=${encodeURIComponent(token)}; path=/; max-age=2592000; SameSite=Lax`;
   }
 }
@@ -139,27 +192,87 @@ export const api = {
   },
 
   dash: {
-    async getSites(): Promise<{ sites: Array<{ id: string; siteId: string; name: string; domain: string; status: string; visitors: string; pageViews: string; bounceRate: string }> }> {
-      return fetchWithAuth("/api/dash/sites");
+    async getSites(): Promise<{ sites: SiteItem[] }> {
+      return fetchWithAuth<{ sites: SiteItem[] }>("/api/dash/sites");
     },
 
-    async createSite(name: string, domain: string) {
-      return fetchWithAuth("/api/dash/sites", {
+    async createSite(name: string, domain: string): Promise<SiteItem> {
+      return fetchWithAuth<SiteItem>("/api/dash/sites", {
         method: "POST",
         body: JSON.stringify({ name, domain }),
       });
     },
 
-    async deleteSite(siteId: string) {
-      return fetchWithAuth(`/api/dash/sites/${siteId}`, {
+    async deleteSite(siteId: string): Promise<{ deleted: boolean }> {
+      return fetchWithAuth<{ deleted: boolean }>(`/api/dash/sites/${siteId}`, {
         method: "DELETE",
       });
     },
 
-    async verifySite(siteId: string) {
-      return fetchWithAuth(`/api/dash/sites/${siteId}/verify`, {
+    async verifySite(siteId: string): Promise<{ verified: boolean }> {
+      return fetchWithAuth<{ verified: boolean }>(`/api/dash/sites/${siteId}/verify`, {
         method: "POST",
       });
+    },
+
+    async getOverviewStats(siteId: string, period = "7d"): Promise<OverviewStats> {
+      return fetchWithAuth<OverviewStats>(`/api/dash/overview/stats?site_id=${siteId}&period=${period}`);
+    },
+
+    async getTimeseries(siteId: string, period = "7d"): Promise<TimeseriesPoint[]> {
+      return fetchWithAuth<TimeseriesPoint[]>(`/api/dash/overview/timeseries?site_id=${siteId}&period=${period}`);
+    },
+
+    async getTopPages(siteId: string, period = "7d"): Promise<{ Pages: DimensionItem[]; Routes: DimensionItem[]; Hostnames: DimensionItem[] }> {
+      return fetchWithAuth<{ Pages: DimensionItem[]; Routes: DimensionItem[]; Hostnames: DimensionItem[] }>(
+        `/api/dash/overview/pages?site_id=${siteId}&period=${period}`
+      );
+    },
+
+    async getTopReferrers(siteId: string, period = "7d"): Promise<{ Referrers: DimensionItem[]; "UTM Parameters": DimensionItem[] }> {
+      return fetchWithAuth<{ Referrers: DimensionItem[]; "UTM Parameters": DimensionItem[] }>(
+        `/api/dash/overview/referrers?site_id=${siteId}&period=${period}`
+      );
+    },
+
+    async getTopCountries(siteId: string, period = "7d"): Promise<{ Countries: DimensionItem[] }> {
+      return fetchWithAuth<{ Countries: DimensionItem[] }>(
+        `/api/dash/overview/countries?site_id=${siteId}&period=${period}`
+      );
+    },
+
+    async getTopDevices(siteId: string, period = "7d"): Promise<{ Devices: DimensionItem[]; Browsers: DimensionItem[] }> {
+      return fetchWithAuth<{ Devices: DimensionItem[]; Browsers: DimensionItem[] }>(
+        `/api/dash/overview/devices?site_id=${siteId}&period=${period}`
+      );
+    },
+
+    async getTopOS(siteId: string, period = "7d"): Promise<{ "Operating Systems": DimensionItem[] }> {
+      return fetchWithAuth<{ "Operating Systems": DimensionItem[] }>(
+        `/api/dash/overview/os?site_id=${siteId}&period=${period}`
+      );
+    },
+
+    async getEventsSummary(siteId: string, period = "7d"): Promise<{ Events: DimensionItem[] }> {
+      return fetchWithAuth<{ Events: DimensionItem[] }>(
+        `/api/dash/overview/events?site_id=${siteId}&period=${period}`
+      );
+    },
+
+    async getRealtimeActive(siteId: string): Promise<{ activeVisitors: number }> {
+      return fetchWithAuth<{ activeVisitors: number }>(`/api/dash/overview/realtime?site_id=${siteId}`);
+    },
+
+    async getVisitors(siteId: string, period = "7d", page = 1, perPage = 10): Promise<{ sessions: VisitorSession[]; total: number; page: number; totalPages: number }> {
+      return fetchWithAuth<{ sessions: VisitorSession[]; total: number; page: number; totalPages: number }>(
+        `/api/dash/visitors?site_id=${siteId}&period=${period}&page=${page}&per_page=${perPage}`
+      );
+    },
+
+    async getEvents(siteId: string, period = "7d", page = 1, perPage = 10): Promise<{ events: CustomEventItem[]; total: number; page: number; totalPages: number }> {
+      return fetchWithAuth<{ events: CustomEventItem[]; total: number; page: number; totalPages: number }>(
+        `/api/dash/events?site_id=${siteId}&period=${period}&page=${page}&per_page=${perPage}`
+      );
     },
   },
 };
