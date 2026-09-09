@@ -31,6 +31,9 @@ export default function TechIcon({ name, className = "text-neutral-500 shrink-0"
 
   // Carriers & Telecom Networks
   if (normalized.includes("starlink")) return <IconSatellite size={size} stroke={1.5} className={className} />;
+  if (normalized.includes("apple private relay") || normalized.includes("apple relay")) {
+    return <IconBrandApple size={size} stroke={1.5} className={className} />;
+  }
   if (
     normalized.includes("mtn") ||
     normalized.includes("airtel") ||

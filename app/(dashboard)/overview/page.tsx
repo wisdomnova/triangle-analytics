@@ -36,7 +36,12 @@ export default function OverviewPage() {
     Referrers: [],
     "UTM Parameters": [],
   });
-  const [countriesData, setCountriesData] = useState<{ Countries: DimensionItem[]; Carriers?: DimensionItem[]; Networks?: DimensionItem[] }>({
+  const [countriesData, setCountriesData] = useState<{
+    Countries: DimensionItem[];
+    Carriers?: DimensionItem[];
+    Networks?: DimensionItem[];
+    "Carriers & ISPs"?: DimensionItem[];
+  }>({
     Countries: [],
     Carriers: [],
   });
@@ -261,8 +266,11 @@ export default function OverviewPage() {
       {/* Geographic, Device & OS Telemetry Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
         <BreakdownList
-          tabs={["Countries", "Carriers"]}
-          data={countriesData as any}
+          tabs={["Countries", "Carriers & ISPs"]}
+          data={{
+            ...countriesData,
+            "Carriers & ISPs": countriesData["Carriers & ISPs"] || countriesData.Carriers || [],
+          } as any}
         />
         <BreakdownList
           tabs={["Devices", "Browsers"]}

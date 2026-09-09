@@ -102,6 +102,15 @@ export default function VisitorsPage() {
     }
   };
 
+  const formatDuration = (ms?: number): string => {
+    if (!ms || ms <= 0) return "0 ms";
+    if (ms < 1000) return `${ms.toLocaleString()} ms`;
+    if (ms < 60000) return `${ms.toLocaleString()} ms (${(ms / 1000).toFixed(1)}s)`;
+    const mins = Math.floor(ms / 60000);
+    const secs = Math.floor((ms % 60000) / 1000);
+    return `${ms.toLocaleString()} ms (${mins}m ${secs}s)`;
+  };
+
   const visitorRows: DataRow[] = sessions.map((s, idx) => {
     const color = avatarColors[idx % avatarColors.length];
     const isOnline = idx < activeVisitors;
@@ -116,6 +125,7 @@ export default function VisitorsPage() {
       status: computedStatus,
       type: `${s.entryPage} (${s.pagesViewed} pages)`,
       email: `${hardware}${s.browser} on ${s.os || "Mac"} (${s.country && s.country !== "Unknown" ? s.country : "Global"}${network})`,
+      duration: formatDuration(s.durationMs),
       timestamp: formatTimeAgo(s.lastSeen),
     };
   });

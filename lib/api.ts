@@ -68,6 +68,7 @@ export interface VisitorSession {
   carrier?: string;
   browser: string;
   os: string;
+  durationMs?: number;
   lastSeen: string;
 }
 
