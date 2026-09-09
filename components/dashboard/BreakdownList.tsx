@@ -25,7 +25,7 @@ export default function BreakdownList({
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const currentItems = data[activeTab] || [];
   const isCountriesTab = activeTab === "Countries";
-  const isTechTab = ["Devices", "Browsers", "Operating Systems"].includes(activeTab);
+  const isTechTab = ["Devices", "Models", "Browsers", "Operating Systems", "Carriers", "Networks"].includes(activeTab);
 
   return (
     <div className="bg-white rounded-3xl p-4 sm:p-6 flex flex-col gap-6 flex-1 w-full min-w-0">

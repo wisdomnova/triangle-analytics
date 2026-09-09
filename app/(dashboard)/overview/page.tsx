@@ -36,9 +36,13 @@ export default function OverviewPage() {
     Referrers: [],
     "UTM Parameters": [],
   });
-  const [countriesData, setCountriesData] = useState<{ Countries: DimensionItem[] }>({ Countries: [] });
-  const [devicesData, setDevicesData] = useState<{ Devices: DimensionItem[]; Browsers: DimensionItem[] }>({
+  const [countriesData, setCountriesData] = useState<{ Countries: DimensionItem[]; Carriers?: DimensionItem[]; Networks?: DimensionItem[] }>({
+    Countries: [],
+    Carriers: [],
+  });
+  const [devicesData, setDevicesData] = useState<{ Devices: DimensionItem[]; Models?: DimensionItem[]; Browsers: DimensionItem[] }>({
     Devices: [],
+    Models: [],
     Browsers: [],
   });
   const [osData, setOsData] = useState<{ "Operating Systems": DimensionItem[] }>({ "Operating Systems": [] });
@@ -59,8 +63,8 @@ export default function OverviewPage() {
       api.dash.getTimeseries(siteId, period).catch(() => []),
       api.dash.getTopPages(siteId, period).catch(() => ({ Pages: [], Routes: [], Hostnames: [] })),
       api.dash.getTopReferrers(siteId, period).catch(() => ({ Referrers: [], "UTM Parameters": [] })),
-      api.dash.getTopCountries(siteId, period).catch(() => ({ Countries: [] })),
-      api.dash.getTopDevices(siteId, period).catch(() => ({ Devices: [], Browsers: [] })),
+      api.dash.getTopCountries(siteId, period).catch(() => ({ Countries: [], Carriers: [] })),
+      api.dash.getTopDevices(siteId, period).catch(() => ({ Devices: [], Models: [], Browsers: [] })),
       api.dash.getTopOS(siteId, period).catch(() => ({ "Operating Systems": [] })),
       api.dash.getEventsSummary(siteId, period).catch(() => ({ Events: [] })),
     ]).then(([statsRes, tsRes, pagesRes, refRes, countRes, devRes, osRes, evRes]) => {
@@ -257,12 +261,12 @@ export default function OverviewPage() {
       {/* Geographic, Device & OS Telemetry Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
         <BreakdownList
-          tabs={["Countries"]}
-          data={countriesData}
+          tabs={["Countries", "Carriers"]}
+          data={countriesData as any}
         />
         <BreakdownList
-          tabs={["Devices", "Browsers"]}
-          data={devicesData}
+          tabs={["Devices", "Models", "Browsers"]}
+          data={devicesData as any}
         />
         <BreakdownList
           tabs={["Operating Systems"]}

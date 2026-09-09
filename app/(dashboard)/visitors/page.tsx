@@ -106,6 +106,8 @@ export default function VisitorsPage() {
     const color = avatarColors[idx % avatarColors.length];
     const isOnline = idx < activeVisitors;
     const computedStatus = getSessionStatus(s.lastSeen, isOnline);
+    const hardware = s.deviceModel ? `${s.deviceModel} · ` : "";
+    const network = s.carrier ? ` · ${s.carrier}` : "";
 
     return {
       id: s.sessionId || `v-${idx}`,
@@ -113,7 +115,7 @@ export default function VisitorsPage() {
       avatarColor: color,
       status: computedStatus,
       type: `${s.entryPage} (${s.pagesViewed} pages)`,
-      email: `${s.browser} on ${s.os || "Mac"} (${s.country && s.country !== "Unknown" ? s.country : "Global"})`,
+      email: `${hardware}${s.browser} on ${s.os || "Mac"} (${s.country && s.country !== "Unknown" ? s.country : "Global"}${network})`,
       timestamp: formatTimeAgo(s.lastSeen),
     };
   });

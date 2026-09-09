@@ -64,6 +64,8 @@ export interface VisitorSession {
   pagesViewed: number;
   country: string;
   device: string;
+  deviceModel?: string;
+  carrier?: string;
   browser: string;
   os: string;
   lastSeen: string;
@@ -258,14 +260,14 @@ export const api = {
       );
     },
 
-    async getTopCountries(siteId: string, period = "7d"): Promise<{ Countries: DimensionItem[] }> {
-      return fetchWithAuth<{ Countries: DimensionItem[] }>(
+    async getTopCountries(siteId: string, period = "7d"): Promise<{ Countries: DimensionItem[]; Carriers?: DimensionItem[]; Networks?: DimensionItem[] }> {
+      return fetchWithAuth<{ Countries: DimensionItem[]; Carriers?: DimensionItem[]; Networks?: DimensionItem[] }>(
         `/api/dash/overview/countries?site_id=${siteId}&period=${period}`
       );
     },
 
-    async getTopDevices(siteId: string, period = "7d"): Promise<{ Devices: DimensionItem[]; Browsers: DimensionItem[] }> {
-      return fetchWithAuth<{ Devices: DimensionItem[]; Browsers: DimensionItem[] }>(
+    async getTopDevices(siteId: string, period = "7d"): Promise<{ Devices: DimensionItem[]; Models?: DimensionItem[]; Browsers: DimensionItem[] }> {
+      return fetchWithAuth<{ Devices: DimensionItem[]; Models?: DimensionItem[]; Browsers: DimensionItem[] }>(
         `/api/dash/overview/devices?site_id=${siteId}&period=${period}`
       );
     },
