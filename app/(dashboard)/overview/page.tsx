@@ -265,7 +265,7 @@ export default function OverviewPage() {
           data={countriesData as any}
         />
         <BreakdownList
-          tabs={["Devices", "Models", "Browsers"]}
+          tabs={["Devices", "Browsers"]}
           data={devicesData as any}
         />
         <BreakdownList

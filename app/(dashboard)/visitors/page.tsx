@@ -106,7 +106,7 @@ export default function VisitorsPage() {
     const color = avatarColors[idx % avatarColors.length];
     const isOnline = idx < activeVisitors;
     const computedStatus = getSessionStatus(s.lastSeen, isOnline);
-    const hardware = s.deviceModel ? `${s.deviceModel} · ` : "";
+    const hardware = s.deviceModel && !s.deviceModel.includes("PC") && !s.deviceModel.includes("Mac") ? `${s.deviceModel} · ` : "";
     const network = s.carrier ? ` · ${s.carrier}` : "";
 
     return {
