@@ -18,10 +18,30 @@ interface DomainContextType {
 
 const DomainContext = createContext<DomainContextType | undefined>(undefined);
 
+const STORAGE_KEY = "_tri_selected_domain_id";
+
 export function DomainProvider({ children }: { children: React.ReactNode }) {
   const [domains, setDomains] = useState<DomainItem[]>([]);
-  const [currentDomainId, setCurrentDomainId] = useState<string | null>(null);
+  const [currentDomainId, _setCurrentDomainId] = useState<string | null>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        return localStorage.getItem(STORAGE_KEY);
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  });
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const setCurrentDomainId = useCallback((id: string) => {
+    _setCurrentDomainId(id);
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(STORAGE_KEY, id);
+      } catch {}
+    }
+  }, []);
 
   const refreshDomains = useCallback(async () => {
     try {
@@ -30,16 +50,30 @@ export function DomainProvider({ children }: { children: React.ReactNode }) {
       const fetchedDomains = res.sites || [];
       setDomains(fetchedDomains);
 
-      setCurrentDomainId((prevId) => {
-        if (prevId && fetchedDomains.some((d) => d.id === prevId || d.siteId === prevId)) {
-          return prevId;
+      _setCurrentDomainId((prevId) => {
+        let candidateId = prevId;
+        if (!candidateId && typeof window !== "undefined") {
+          try {
+            candidateId = localStorage.getItem(STORAGE_KEY);
+          } catch {}
         }
-        return fetchedDomains.length > 0 ? fetchedDomains[0].siteId : null;
+
+        if (candidateId && fetchedDomains.some((d) => d.id === candidateId || d.siteId === candidateId)) {
+          return candidateId;
+        }
+
+        const fallback = fetchedDomains.length > 0 ? fetchedDomains[0].siteId : null;
+        if (fallback && typeof window !== "undefined") {
+          try {
+            localStorage.setItem(STORAGE_KEY, fallback);
+          } catch {}
+        }
+        return fallback;
       });
     } catch {
       // Fallback empty domains
       setDomains([]);
-      setCurrentDomainId(null);
+      _setCurrentDomainId(null);
     } finally {
       setIsLoading(false);
     }
@@ -65,6 +99,13 @@ export function DomainProvider({ children }: { children: React.ReactNode }) {
 
   const removeDomain = async (siteId: string) => {
     await api.dash.deleteSite(siteId);
+    if (currentDomainId === siteId) {
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+        } catch {}
+      }
+    }
     await refreshDomains();
   };
 
@@ -79,7 +120,7 @@ export function DomainProvider({ children }: { children: React.ReactNode }) {
       value={{
         domains,
         currentDomain,
-        setCurrentDomainId: (id: string) => setCurrentDomainId(id),
+        setCurrentDomainId,
         isLoading,
         refreshDomains,
         addDomain,

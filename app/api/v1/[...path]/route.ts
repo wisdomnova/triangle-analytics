@@ -33,10 +33,24 @@ export async function POST(
       body,
     });
 
-    return new NextResponse(null, { status: res.status });
+    return new NextResponse(null, {
+      status: res.status,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+      },
+    });
   } catch (err) {
     console.error("[api/v1 proxy error]:", err);
-    return new NextResponse(null, { status: 204 });
+    return new NextResponse(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+      },
+    });
   }
 }
 
