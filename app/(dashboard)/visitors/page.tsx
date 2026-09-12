@@ -7,7 +7,7 @@ import { TablePageSkeleton } from "@/components/dashboard/SkeletonLoaders";
 import { useDomain } from "@/context/DomainContext";
 import { useRealtime } from "@/hooks/useRealtime";
 import { api, VisitorSession } from "@/lib/api";
-import { IconWorld } from "@tabler/icons-react";
+import { IconWifi } from "@tabler/icons-react";
 
 function formatTimeAgo(isoString: string): string {
   try {
@@ -140,7 +140,7 @@ export default function VisitorsPage() {
         </div>
 
         <div className="flex items-center gap-2.5 bg-white hover:bg-neutral-50 rounded-xl px-4 h-11 text-sm font-medium text-neutral-900 select-none cursor-default transition-colors w-fit shrink-0 whitespace-nowrap">
-          <IconWorld size={16} stroke={1.8} className="text-blue-500 shrink-0" />
+          <IconWifi size={16} stroke={2} className="text-blue-500 shrink-0" />
           <span>{activeVisitors} online now</span>
         </div>
       </div>
