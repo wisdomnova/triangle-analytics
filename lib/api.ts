@@ -48,7 +48,9 @@ export interface OverviewStats {
 export interface TimeseriesPoint {
   date: string;
   visitors: number;
-  pageviews: number;
+  pageViews?: number;
+  pageviews?: number;
+  bounceRate?: number;
 }
 
 export interface DimensionItem {

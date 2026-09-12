@@ -149,20 +149,24 @@ export default function OverviewPage() {
   // Chart data from timeseries
   const chartData =
     timeseries.length > 0
-      ? timeseries.map((pt) => ({
-          date: pt.date,
-          visitors: pt.visitors,
-          pageViews: pt.pageviews,
-          bounceRate: 28,
-        }))
+      ? timeseries.map((pt) => {
+          const views = Number(pt.pageViews ?? pt.pageviews ?? 0);
+          return {
+            date: pt.date,
+            visitors: Number(pt.visitors) || 0,
+            pageViews: views,
+            pageviews: views,
+            bounceRate: Number(pt.bounceRate ?? 0),
+          };
+        })
       : [
-          { date: "Mon", visitors: 0, pageViews: 0, bounceRate: 0 },
-          { date: "Tue", visitors: 0, pageViews: 0, bounceRate: 0 },
-          { date: "Wed", visitors: 0, pageViews: 0, bounceRate: 0 },
-          { date: "Thu", visitors: 0, pageViews: 0, bounceRate: 0 },
-          { date: "Fri", visitors: 0, pageViews: 0, bounceRate: 0 },
-          { date: "Sat", visitors: 0, pageViews: 0, bounceRate: 0 },
-          { date: "Sun", visitors: 0, pageViews: 0, bounceRate: 0 },
+          { date: "Mon", visitors: 0, pageViews: 0, pageviews: 0, bounceRate: 0 },
+          { date: "Tue", visitors: 0, pageViews: 0, pageviews: 0, bounceRate: 0 },
+          { date: "Wed", visitors: 0, pageViews: 0, pageviews: 0, bounceRate: 0 },
+          { date: "Thu", visitors: 0, pageViews: 0, pageviews: 0, bounceRate: 0 },
+          { date: "Fri", visitors: 0, pageViews: 0, pageviews: 0, bounceRate: 0 },
+          { date: "Sat", visitors: 0, pageViews: 0, pageviews: 0, bounceRate: 0 },
+          { date: "Sun", visitors: 0, pageViews: 0, pageviews: 0, bounceRate: 0 },
         ];
 
   // Dynamic segment metrics based on telemetry data & active interaction events

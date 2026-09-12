@@ -14,7 +14,8 @@ interface TrafficChartProps {
   data: {
     date: string;
     visitors: number;
-    pageViews: number;
+    pageViews?: number;
+    pageviews?: number;
     bounceRate: number;
   }[];
   activeMetric: string;
@@ -22,8 +23,8 @@ interface TrafficChartProps {
 
 export default function TrafficChart({ data, activeMetric }: TrafficChartProps) {
   const getMetricKey = () => {
-    if (activeMetric === "pageviews") return "pageViews";
-    if (activeMetric === "bouncerate") return "bounceRate";
+    if (activeMetric === "pageviews" || activeMetric === "pageViews") return "pageViews";
+    if (activeMetric === "bouncerate" || activeMetric === "bounceRate") return "bounceRate";
     return "visitors";
   };
 
@@ -60,10 +61,13 @@ export default function TrafficChart({ data, activeMetric }: TrafficChartProps) 
             <Tooltip
               content={({ active, payload, label }) => {
                 if (active && payload && payload.length) {
+                  const val = payload[0].value;
+                  const isRate = activeMetric === "bouncerate" || activeMetric === "bounceRate";
+                  const formatted = isRate ? `${val}%` : Number(val).toLocaleString();
                   return (
-                    <div className="bg-neutral-900 text-white px-3.5 py-2 rounded-xl text-xs font-light">
+                    <div className="bg-neutral-900 text-white px-3.5 py-2 rounded-xl text-xs font-light shadow-lg border border-neutral-800">
                       <span className="text-neutral-400 block mb-0.5">{label}</span>
-                      <span className="font-normal text-sm">{payload[0].value}</span>
+                      <span className="font-normal text-sm">{formatted}</span>
                     </div>
                   );
                 }
@@ -76,6 +80,7 @@ export default function TrafficChart({ data, activeMetric }: TrafficChartProps) 
               stroke="#2563EB"
               strokeWidth={2.5}
               fill="url(#chartGradient)"
+              activeDot={{ r: 5, fill: "#2563EB", stroke: "#FFFFFF", strokeWidth: 2 }}
             />
           </AreaChart>
         </ResponsiveContainer>
