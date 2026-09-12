@@ -1,9 +1,19 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { getAuthToken } from "@/lib/api";
 
 export default function CTA() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    if (getAuthToken()) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
   return (
     <section className="w-full flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 pt-16 pb-20">
       <motion.div 
@@ -20,10 +30,10 @@ export default function CTA() {
           Embed privacy-friendly analytics and stream real-time platform telemetry in under two minutes.
         </p>
         <Link
-          href="/auth/join"
+          href={isAuthenticated ? "/overview" : "/auth/join"}
           className="group flex items-center gap-1.5 text-sm font-semibold bg-[#1E1E1C] text-[#FAF6F0] pl-6 pr-5 py-3 rounded-full hover:bg-[#323230] transition-colors mt-4 shadow-xs"
         >
-          <span>Get started for free</span>
+          <span>{isAuthenticated ? "Go to dashboard" : "Get started for free"}</span>
           <span className="material-symbols-outlined text-[18px] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
             arrow_outward
           </span>

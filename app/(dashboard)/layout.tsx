@@ -29,7 +29,7 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col md:flex-row h-screen w-full max-w-full bg-[#FAF8F5] text-[#1E1E1C] overflow-hidden">
       {/* Mobile Top Header */}
-      <header className="md:hidden flex items-center justify-between px-4 h-14 bg-[#FAF8F5] border-b border-[#EAE5D9] shrink-0 z-30">
+      <header className="md:hidden flex items-center justify-between px-4 h-14 bg-[#FAF8F5] shrink-0 z-30">
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -56,7 +56,7 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
         {currentDomain && (
           <Link
             href="/domains"
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-[#EAE5D9] text-[11px] font-medium text-neutral-700 max-w-[150px] truncate hover:bg-neutral-50 transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white text-[11px] font-medium text-neutral-700 max-w-[150px] truncate hover:bg-neutral-50 transition-colors shadow-2xs"
           >
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 animate-pulse" />
             <span className="truncate">{currentDomain.domain}</span>

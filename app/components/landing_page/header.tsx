@@ -4,10 +4,52 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconMenu2, IconX, IconBrandGithub } from "@tabler/icons-react";
+import { getAuthToken, getStoredUser, clearAuthSession, api, User } from "@/lib/api";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [starCount, setStarCount] = useState<number | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+
+  // Check active auth session
+  useEffect(() => {
+    let isMounted = true;
+    const token = getAuthToken();
+    const stored = getStoredUser();
+
+    if (token && stored) {
+      setUser(stored);
+    }
+
+    if (token) {
+      api.auth
+        .getMe()
+        .then((res) => {
+          if (isMounted && res?.user) {
+            setUser(res.user);
+            if (typeof window !== "undefined") {
+              localStorage.setItem("user", JSON.stringify(res.user));
+            }
+          }
+        })
+        .catch((err) => {
+          if (
+            err?.message?.includes("401") ||
+            err?.message?.toLowerCase().includes("unauthorized") ||
+            err?.message?.toLowerCase().includes("jwt")
+          ) {
+            clearAuthSession();
+            if (isMounted) setUser(null);
+          }
+        });
+    } else {
+      setUser(null);
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Fetch live GitHub stars from public repository
   useEffect(() => {
@@ -105,7 +147,7 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Desktop Actions: GitHub Star (Black) + Login + Sign Up (Black) with space before buttons */}
+          {/* Desktop Actions: GitHub Star + (Profile & Dashboard OR Login & Sign Up) */}
           <div className="hidden md:flex items-center gap-2.5 lg:gap-3 shrink-0 ml-6 sm:ml-8 md:ml-10 lg:ml-14">
             <a
               href="https://github.com/wisdomnova/triangle-analytics"
@@ -121,25 +163,52 @@ export default function Header() {
               </span>
             </a>
 
-            <Link
-              href="/auth/signin"
-              className="text-xs sm:text-sm font-semibold text-[#1E1E1C] hover:text-neutral-500 px-3 py-2 transition-colors"
-            >
-              Login
-            </Link>
+            {user ? (
+              <>
+                <Link
+                  href="/profile"
+                  className="flex items-center gap-2 text-xs sm:text-sm font-medium text-[#1E1E1C] hover:text-neutral-600 px-3 py-1.5 rounded-full hover:bg-neutral-100 transition-colors"
+                  title="View Profile Settings"
+                >
+                  <div className="w-6 h-6 rounded-full bg-[#1E1E1C] text-white text-[10px] font-bold flex items-center justify-center uppercase shrink-0">
+                    {user.name ? user.name.trim().charAt(0) : "U"}
+                  </div>
+                  <span className="max-w-[120px] truncate">{user.name || "Profile"}</span>
+                </Link>
 
-            <Link
-              href="/auth/join"
-              className="group flex items-center gap-1.5 text-xs sm:text-sm font-medium bg-[#1E1E1C] text-[#FAF6F0] pl-4 pr-3.5 py-2 rounded-full hover:bg-[#323230] transition-colors shadow-2xs"
-            >
-              <span>Sign Up</span>
-              <span className="material-symbols-outlined text-[15px] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                arrow_outward
-              </span>
-            </Link>
+                <Link
+                  href="/overview"
+                  className="group flex items-center gap-1.5 text-xs sm:text-sm font-medium bg-[#1E1E1C] text-[#FAF6F0] pl-4 pr-3.5 py-2 rounded-full hover:bg-[#323230] transition-colors shadow-2xs"
+                >
+                  <span>Dashboard</span>
+                  <span className="material-symbols-outlined text-[15px] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                    arrow_outward
+                  </span>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/auth/signin"
+                  className="text-xs sm:text-sm font-semibold text-[#1E1E1C] hover:text-neutral-500 px-3 py-2 transition-colors"
+                >
+                  Login
+                </Link>
+
+                <Link
+                  href="/auth/join"
+                  className="group flex items-center gap-1.5 text-xs sm:text-sm font-medium bg-[#1E1E1C] text-[#FAF6F0] pl-4 pr-3.5 py-2 rounded-full hover:bg-[#323230] transition-colors shadow-2xs"
+                >
+                  <span>Sign Up</span>
+                  <span className="material-symbols-outlined text-[15px] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                    arrow_outward
+                  </span>
+                </Link>
+              </>
+            )}
           </div>
 
-          {/* Mobile Right Controls: GitHub Star Link + Login + Hamburger Toggle */}
+          {/* Mobile Right Controls: GitHub Star Link + (Dashboard OR Login) + Hamburger Toggle */}
           <div className="flex md:hidden items-center gap-1.5 shrink-0">
             <a
               href="https://github.com/wisdomnova/triangle-analytics"
@@ -155,12 +224,21 @@ export default function Header() {
               </span>
             </a>
 
-            <Link
-              href="/auth/signin"
-              className="text-xs font-semibold bg-neutral-100 hover:bg-neutral-200 text-[#1E1E1C] px-2.5 py-1.5 rounded-full transition-colors"
-            >
-              Login
-            </Link>
+            {user ? (
+              <Link
+                href="/overview"
+                className="flex items-center gap-1 text-xs font-semibold bg-[#1E1E1C] text-white px-3 py-1.5 rounded-full transition-colors"
+              >
+                <span>Dashboard</span>
+              </Link>
+            ) : (
+              <Link
+                href="/auth/signin"
+                className="text-xs font-semibold bg-neutral-100 hover:bg-neutral-200 text-[#1E1E1C] px-2.5 py-1.5 rounded-full transition-colors"
+              >
+                Login
+              </Link>
+            )}
 
             <button
               type="button"
@@ -230,23 +308,61 @@ export default function Header() {
                   </span>
                 </a>
 
-                <Link
-                  href="/auth/join"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-neutral-100 hover:bg-neutral-200 text-[#1E1E1C] rounded-2xl text-sm font-medium transition-colors"
-                >
-                  <span>Sign Up Free</span>
-                  <span className="material-symbols-outlined text-[16px]">
-                    arrow_outward
-                  </span>
-                </Link>
-                <Link
-                  href="/auth/signin"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full text-center py-2.5 text-neutral-600 hover:text-neutral-900 rounded-2xl text-sm font-semibold transition-colors"
-                >
-                  Login to Dashboard
-                </Link>
+                {user ? (
+                  <>
+                    <Link
+                      href="/overview"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="w-full flex items-center justify-center gap-2 py-3 bg-[#1E1E1C] text-[#FAF6F0] rounded-2xl text-sm font-medium hover:bg-[#323230] transition-colors shadow-2xs"
+                    >
+                      <span>Go to Dashboard</span>
+                      <span className="material-symbols-outlined text-[16px]">
+                        arrow_outward
+                      </span>
+                    </Link>
+
+                    <Link
+                      href="/profile"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="w-full flex items-center justify-between px-4 py-3 bg-neutral-100 hover:bg-neutral-200 text-[#1E1E1C] rounded-2xl transition-colors"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-7 rounded-full bg-[#1E1E1C] text-white text-xs font-bold flex items-center justify-center uppercase shrink-0">
+                          {user.name ? user.name.trim().charAt(0) : "U"}
+                        </div>
+                        <div className="flex flex-col min-w-0 text-left">
+                          <span className="text-xs font-semibold text-[#1E1E1C] truncate">
+                            {user.name || "Profile"}
+                          </span>
+                          <span className="text-[11px] text-neutral-500 truncate">
+                            {user.email}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-xs font-medium text-neutral-500">Settings</span>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/auth/join"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="w-full flex items-center justify-center gap-2 py-3 bg-neutral-100 hover:bg-neutral-200 text-[#1E1E1C] rounded-2xl text-sm font-medium transition-colors"
+                    >
+                      <span>Sign Up Free</span>
+                      <span className="material-symbols-outlined text-[16px]">
+                        arrow_outward
+                      </span>
+                    </Link>
+                    <Link
+                      href="/auth/signin"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="w-full text-center py-2.5 text-neutral-600 hover:text-neutral-900 rounded-2xl text-sm font-semibold transition-colors"
+                    >
+                      Login to Dashboard
+                    </Link>
+                  </>
+                )}
               </div>
             </motion.div>
           </motion.div>

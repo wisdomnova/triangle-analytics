@@ -19,7 +19,7 @@ export default function MetricsTabs({
   onSelectMetric,
 }: MetricsTabsProps) {
   return (
-    <div className="flex items-center gap-3 sm:gap-4 w-full max-w-full overflow-x-auto pb-1">
+    <div className="flex items-center gap-3 sm:gap-4 w-full max-w-full overflow-x-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden pb-1">
       {metrics.map((item) => {
         const isActive = item.id === activeMetric;
         return (
