@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/dashboard/Sidebar";
 import { DomainProvider, useDomain } from "@/context/DomainContext";
-import { IconMenu2 } from "@tabler/icons-react";
+import { IconMenu2, IconWorld } from "@tabler/icons-react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
@@ -56,10 +56,10 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
         {currentDomain && (
           <Link
             href="/domains"
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white text-[11px] font-medium text-neutral-700 max-w-[150px] truncate hover:bg-neutral-50 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-xs font-medium text-neutral-700 w-fit shrink-0 whitespace-nowrap hover:bg-neutral-50 transition-colors"
           >
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-            <span className="truncate">{currentDomain.domain}</span>
+            <IconWorld size={14} stroke={1.8} className="text-neutral-500 shrink-0" />
+            <span>{currentDomain.domain}</span>
           </Link>
         )}
       </header>
