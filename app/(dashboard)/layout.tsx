@@ -56,9 +56,9 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
         {currentDomain && (
           <Link
             href="/domains"
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white text-[11px] font-medium text-neutral-700 max-w-[150px] truncate hover:bg-neutral-50 transition-colors shadow-2xs"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white text-[11px] font-medium text-neutral-700 max-w-[150px] truncate hover:bg-neutral-50 transition-colors"
           >
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 animate-pulse" />
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
             <span className="truncate">{currentDomain.domain}</span>
           </Link>
         )}

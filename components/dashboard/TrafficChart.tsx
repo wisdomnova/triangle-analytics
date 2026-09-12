@@ -65,7 +65,7 @@ export default function TrafficChart({ data, activeMetric }: TrafficChartProps) 
                   const isRate = activeMetric === "bouncerate" || activeMetric === "bounceRate";
                   const formatted = isRate ? `${val}%` : Number(val).toLocaleString();
                   return (
-                    <div className="bg-neutral-900 text-white px-3.5 py-2 rounded-xl text-xs font-light shadow-lg border border-neutral-800">
+                    <div className="bg-neutral-900 text-white px-3.5 py-2 rounded-xl text-xs font-light border border-neutral-800">
                       <span className="text-neutral-400 block mb-0.5">{label}</span>
                       <span className="font-normal text-sm">{formatted}</span>
                     </div>

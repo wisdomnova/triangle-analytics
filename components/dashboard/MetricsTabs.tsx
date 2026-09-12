@@ -28,7 +28,7 @@ export default function MetricsTabs({
             type="button"
             onClick={() => onSelectMetric(item.id)}
             className={`flex flex-col items-start text-left p-4 sm:p-6 rounded-2xl min-w-[140px] sm:min-w-[180px] flex-1 transition-all cursor-pointer shrink-0 ${
-              isActive ? "bg-white shadow-xs" : "bg-transparent hover:bg-neutral-100/40"
+              isActive ? "bg-white" : "bg-transparent hover:bg-neutral-100/40"
             }`}
           >
             <span className="text-xs font-normal text-neutral-400">
