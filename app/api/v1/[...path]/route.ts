@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL =
+  process.env.BACKEND_API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
-  "https://triangle-analytics-api-5e8e94f7dd98.herokuapp.com";
+  "";
 
 export async function POST(
   req: NextRequest,
@@ -10,6 +11,19 @@ export async function POST(
 ) {
   const resolvedParams = await params;
   const path = resolvedParams.path ? resolvedParams.path.join("/") : "event";
+
+  if (!BACKEND_URL) {
+    console.error("[api/v1 proxy]: Backend URL is not configured. Set BACKEND_API_URL or NEXT_PUBLIC_API_URL.");
+    return new NextResponse(null, {
+      status: 503,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+      },
+    });
+  }
+
   const url = `${BACKEND_URL}/api/v1/${path}`;
 
   const asNumber = req.headers.get("x-vercel-ip-as-number") || "";
@@ -60,6 +74,11 @@ export async function GET(
 ) {
   const resolvedParams = await params;
   const path = resolvedParams.path ? resolvedParams.path.join("/") : "";
+
+  if (!BACKEND_URL) {
+    return new NextResponse(null, { status: 503 });
+  }
+
   const url = `${BACKEND_URL}/api/v1/${path}`;
 
   try {

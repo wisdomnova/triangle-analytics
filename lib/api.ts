@@ -2,8 +2,7 @@
  * Triangle Analytics Frontend API Client
  */
 
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://triangle-analytics-api-5e8e94f7dd98.herokuapp.com";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
 export interface User {
   id: string;
