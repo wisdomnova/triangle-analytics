@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import DataTable, { DataRow } from "@/components/dashboard/DataTable";
 import EmptyDomainState from "@/components/dashboard/EmptyDomainState";
+import { TablePageSkeleton } from "@/components/dashboard/SkeletonLoaders";
 import { useDomain } from "@/context/DomainContext";
 import { useRealtime } from "@/hooks/useRealtime";
 import { api, VisitorSession } from "@/lib/api";
@@ -68,12 +69,7 @@ export default function VisitorsPage() {
   }, [latestEvent]);
 
   if (isDomainLoading) {
-    return (
-      <div className="w-full bg-white rounded-3xl p-16 flex flex-col items-center justify-center gap-4 text-center border border-[#EAE5D9]">
-        <div className="w-8 h-8 border-2 border-neutral-300 border-t-[#0B63E5] rounded-full animate-spin" />
-        <span className="text-xs text-neutral-400 font-light">Loading visitor sessions...</span>
-      </div>
-    );
+    return <TablePageSkeleton titleWidth="w-64" hasPill={true} />;
   }
 
   if (!currentDomain) {

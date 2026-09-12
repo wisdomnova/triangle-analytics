@@ -13,6 +13,7 @@ import {
 } from "@tabler/icons-react";
 import Input from "@/components/dashboard/Input";
 import EmptyDomainState from "@/components/dashboard/EmptyDomainState";
+import { DomainsPageSkeleton } from "@/components/dashboard/SkeletonLoaders";
 import { useDomain } from "@/context/DomainContext";
 
 export default function DomainsPage() {
@@ -183,10 +184,7 @@ export default function DomainsPage() {
 
       {/* Loading Skeleton */}
       {isLoading && domains.length === 0 && !isAddingDomain && (
-        <div className="bg-white rounded-3xl p-12 flex flex-col items-center justify-center gap-4 text-center">
-          <div className="w-8 h-8 border-2 border-neutral-300 border-t-[#0B63E5] rounded-full animate-spin" />
-          <span className="text-xs text-neutral-400 font-light">Loading domain properties...</span>
-        </div>
+        <DomainsPageSkeleton />
       )}
 
       {/* Empty State when no domains exist */}

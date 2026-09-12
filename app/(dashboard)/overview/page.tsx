@@ -7,6 +7,7 @@ import TrafficChart from "@/components/dashboard/TrafficChart";
 import SegmentProgress from "@/components/dashboard/SegmentProgress";
 import BreakdownList from "@/components/dashboard/BreakdownList";
 import EmptyDomainState from "@/components/dashboard/EmptyDomainState";
+import { OverviewSkeleton } from "@/components/dashboard/SkeletonLoaders";
 import { useDomain } from "@/context/DomainContext";
 import { useRealtime } from "@/hooks/useRealtime";
 import { IconWorld } from "@tabler/icons-react";
@@ -100,12 +101,7 @@ export default function OverviewPage() {
 
   // If loading domains
   if (isDomainLoading) {
-    return (
-      <div className="w-full bg-white rounded-3xl p-16 flex flex-col items-center justify-center gap-4 text-center border border-[#EAE5D9]">
-        <div className="w-8 h-8 border-2 border-neutral-300 border-t-[#0B63E5] rounded-full animate-spin" />
-        <span className="text-xs text-neutral-400 font-light">Loading telemetry overview...</span>
-      </div>
-    );
+    return <OverviewSkeleton />;
   }
 
   // If no domain properties exist, show empty state
