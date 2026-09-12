@@ -6,6 +6,7 @@ import EmptyDomainState from "@/components/dashboard/EmptyDomainState";
 import { useDomain } from "@/context/DomainContext";
 import { useRealtime } from "@/hooks/useRealtime";
 import { api, VisitorSession } from "@/lib/api";
+import { IconWorld } from "@tabler/icons-react";
 
 function formatTimeAgo(isoString: string): string {
   try {
@@ -142,9 +143,9 @@ export default function VisitorsPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 bg-white border border-[#EAE5D9] rounded-xl px-4 h-10 text-xs font-medium text-neutral-900 select-none">
-          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>{activeVisitors} online right now</span>
+        <div className="flex items-center gap-2.5 bg-white hover:bg-neutral-50 rounded-xl px-4 h-11 text-sm font-medium text-neutral-900 select-none cursor-default transition-colors w-fit shrink-0 whitespace-nowrap">
+          <IconWorld size={16} stroke={1.8} className="text-blue-500 shrink-0" />
+          <span>{activeVisitors} online now</span>
         </div>
       </div>
 
